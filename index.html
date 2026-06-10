@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Now · ADHD Mental Health App</title>
+<style>
+:root{
+  --p:#7c5cbf;--p2:#5b6abf;--teal:#2c9e98;--orange:#e8963a;
+  --pink:#d45f96;--green:#3aaa6a;--red:#e05c5c;--blue:#4a80d4;
+  --bg:#f0f4ff;--card:#fff;--text:#2d3748;--muted:#718096;
+  --r:18px;--sh:0 6px 24px rgba(124,92,191,.11);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);min-height:100vh;color:var(--text);overflow-x:hidden}
+.orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.14;animation:fl 9s ease-in-out infinite}
+.o1{width:440px;height:440px;background:var(--p);top:-130px;left:-130px}
+.o2{width:330px;height:330px;background:var(--teal);bottom:-80px;right:-70px;animation-delay:-3.5s}
+.o3{width:250px;height:250px;background:var(--pink);top:40%;left:52%;animation-delay:-6s}
+@keyframes fl{0%,100%{transform:translateY(0)scale(1)}50%{transform:translateY(-28px)scale(1.05)}}
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 16px 90px}
+
+/* HEADER */
+.hdr{text-align:center;padding:26px 0 14px;animation:fup .6s ease both}
+.hdr-logo{font-size:2.1rem;font-weight:800;letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--p),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-sub{color:var(--muted);font-size:.78rem;margin-top:3px}
+
+/* QUOTE */
+.quote{background:linear-gradient(135deg,var(--p),var(--p2));
+  border-radius:var(--r);padding:17px 20px;margin-bottom:13px;
+  position:relative;overflow:hidden;cursor:pointer;animation:fup .5s ease .05s both}
+.quote::before{content:'"';position:absolute;top:-22px;left:8px;
+  font-size:6.5rem;color:rgba(255,255,255,.08);font-family:serif;line-height:1}
+.q-text{color:#fff;font-size:.88rem;line-height:1.65;font-style:italic;position:relative}
+.q-src{color:rgba(255,255,255,.6);font-size:.72rem;margin-top:7px;font-weight:600}
+.q-tap{color:rgba(255,255,255,.4);font-size:.68rem;margin-top:3px}
+
+/* MOOD */
+.mood{background:var(--card);border-radius:var(--r);padding:14px 17px;
+  margin-bottom:13px;box-shadow:var(--sh);animation:fup .5s ease .1s both}
+.sec-lbl{font-size:.72rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px}
+.moods{display:flex;gap:5px;justify-content:space-around}
+.mbtn{font-size:1.45rem;background:none;border:2px solid transparent;
+  border-radius:9px;padding:6px 8px;cursor:pointer;transition:all .2s;flex:1;text-align:center}
+.mbtn:hover{transform:scale(1.2);background:var(--bg)}
+.mbtn.on{border-color:var(--p);background:#f3eeff;transform:scale(1.12);animation:pop .3s ease}
+.mtxt{text-align:center;margin-top:7px;font-size:.8rem;color:var(--p);font-weight:600;min-height:16px}
+
+/* PROGRESS */
+.prog{background:var(--card);border-radius:var(--r);padding:14px 17px;
+  margin-bottom:13px;box-shadow:var(--sh);display:flex;align-items:center;
+  gap:13px;animation:fup .5s ease .15s both}
+.rbg{fill:none;stroke:#e2e8f0;stroke-width:6}
+.rfill{fill:none;stroke:url(#rg);stroke-width:6;stroke-linecap:round;
+  stroke-dasharray:201;stroke-dashoffset:201;
+  transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1s ease}
+.prog-info strong{font-size:.93rem;color:var(--text)}
+.prog-info span{font-size:.78rem;color:var(--muted);margin-top:2px;display:block}
+.prog-cta{font-size:.75rem;color:var(--p);font-weight:700;margin-top:4px}
+
+/* RESCUE */
+.rescue{background:linear-gradient(135deg,#e85d5d,#e8863a);
+  border-radius:var(--r);padding:15px 17px;margin-bottom:13px;
+  box-shadow:0 5px 18px rgba(232,93,93,.26);cursor:pointer;
+  transition:transform .2s;border:none;width:100%;text-align:left;
+  animation:fup .5s ease .2s both}
+.rescue:hover{transform:translateY(-2px)}
+.rescue:active{transform:scale(.98)}
+.rr{display:flex;align-items:center;gap:9px}
+.ri{font-size:1.45rem}
+.rt{color:#fff;font-weight:700;font-size:.92rem}
+.rs{color:rgba(255,255,255,.82);font-size:.76rem;margin-top:2px}
+.rd{width:8px;height:8px;border-radius:50%;background:#fff;margin-left:auto;
+  animation:blink 1.3s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+
+/* SECTION LABEL */
+.slbl{font-size:.71rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
+
+/* EXERCISE CARDS */
+.cards{display:grid;gap:10px}
+.card{background:var(--card);border-radius:var(--r);padding:14px 16px;
+  box-shadow:var(--sh);cursor:pointer;border:2px solid transparent;
+  transition:all .22s ease;display:flex;align-items:center;gap:13px;
+  animation:fup .5s ease both;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;left:0;top:0;bottom:0;
+  width:4px;border-radius:4px 0 0 4px}
+.card:hover{transform:translateY(-2px) scale(1.005);
+  box-shadow:0 12px 32px rgba(124,92,191,.17);border-color:var(--p)35}
+.card:active{transform:scale(.98)}
+.ci{font-size:1.75rem;flex-shrink:0}
+.cn{font-weight:700;font-size:.91rem;color:var(--text)}
+.cd{font-size:.78rem;color:var(--muted);margin-top:2px;line-height:1.4}
+.cm{display:flex;align-items:center;gap:6px;margin-top:5px}
+.ct{font-size:.7rem;font-weight:600;color:#fff;padding:2px 7px;border-radius:20px;
+  background:linear-gradient(135deg,var(--p),var(--p2))}
+.ctag{font-size:.69rem;color:var(--muted)}
+.cdone{font-size:.73rem;color:var(--green);font-weight:700;margin-left:auto;padding-right:3px}
+
+/* color accents per card */
+.card:nth-child(1)::after{background:var(--p)}
+.card:nth-child(2)::after{background:var(--teal)}
+.card:nth-child(3)::after{background:var(--pink)}
+.card:nth-child(4)::after{background:var(--orange)}
+.card:nth-child(5)::after{background:var(--green)}
+.card:nth-child(6)::after{background:var(--p2)}
+.card:nth-child(7)::after{background:var(--blue)}
+.card:nth-child(8)::after{background:var(--red)}
+.card:nth-child(9)::after{background:var(--teal)}
+.card:nth-child(10)::after{background:var(--orange)}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);
+  border-top:1px solid #e2e8f0;display:flex;z-index:100;backdrop-filter:blur(14px)}
+.nb{flex:1;background:none;border:none;cursor:pointer;
+  padding:9px 3px 12px;display:flex;flex-direction:column;
+  align-items:center;gap:2px;color:var(--muted);font-size:.62rem;font-weight:600;transition:all .2s}
+.nb .ni{font-size:1.25rem;transition:transform .2s}
+.nb:hover .ni{transform:scale(1.18)}
+.nb.on{color:var(--p)}.nb.on .ni{transform:scale(1.1)}
+
+/* TABS */
+.tab{display:none}.tab.on{display:block}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0);backdrop-filter:blur(0px);
+  display:flex;align-items:flex-end;justify-content:center;
+  pointer-events:none;transition:all .35s ease}
+.modal.on{background:rgba(0,0,0,.52);backdrop-filter:blur(5px);pointer-events:all}
+.msheet{background:#fff;border-radius:26px 26px 0 0;
+  width:100%;max-width:500px;max-height:92vh;overflow-y:auto;
+  padding:10px 22px 44px;transform:translateY(100%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 -5px 32px rgba(0,0,0,.16)}
+.modal.on .msheet{transform:translateY(0)}
+.drag{width:36px;height:4px;background:#e2e8f0;border-radius:4px;margin:0 auto 17px}
+.mclose{position:absolute;top:17px;right:17px;width:33px;height:33px;
+  border-radius:50%;background:var(--bg);border:none;cursor:pointer;
+  font-size:.9rem;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);transition:all .2s}
+.mclose:hover{background:#e2e8f0}
+
+/* EXERCISE COMPONENTS */
+.ex-hdr{text-align:center;margin-bottom:18px;position:relative}
+.ex-emoji{font-size:2.3rem;margin-bottom:6px}
+.ex-title{font-size:1.3rem;font-weight:800;color:var(--text)}
+.ex-desc{color:var(--muted);font-size:.83rem;margin-top:5px;line-height:1.5}
+
+/* BREATHING ORB */
+.orb-wrap{display:flex;flex-direction:column;align-items:center;margin:20px 0}
+.morb{width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,var(--p)38,var(--p2)18,transparent);
+  transition:all 1.8s cubic-bezier(.45,0,.55,1);position:relative;margin-bottom:13px}
+.morb::before,.morb::after{content:'';position:absolute;border-radius:50%;
+  border:2px solid var(--p);opacity:.22;inset:-11px;animation:rip 3.2s ease-in-out infinite}
+.morb::after{animation-delay:-1.6s;inset:-21px}
+@keyframes rip{0%{opacity:.22;transform:scale(1)}100%{opacity:0;transform:scale(1.45)}}
+.morb.inhale{transform:scale(1.5)}.morb.hold{transform:scale(1.5)}.morb.exhale{transform:scale(1)}
+.orb-phase{font-size:.93rem;font-weight:700;color:var(--p);text-align:center}
+.orb-sub{font-size:.73rem;color:var(--muted);text-align:center;margin-top:3px}
+
+/* STEPS */
+.steps{margin:13px 0}
+.step{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;
+  border-radius:10px;margin-bottom:6px;background:var(--bg);
+  opacity:.42;transition:all .38s ease}
+.step.on{background:#f3eeff;opacity:1;transform:scale(1.01)}
+.snum{width:24px;height:24px;border-radius:50%;background:var(--p);color:#fff;
+  font-size:.73rem;font-weight:700;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0}
+.stxt{font-size:.85rem;color:var(--text);line-height:1.5;padding-top:3px}
+
+/* INPUTS */
+.jlbl{font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:600}
+.jtxt{width:100%;border:2px solid #e2e8f0;border-radius:11px;
+  padding:11px 13px;font-size:.86rem;font-family:inherit;
+  color:var(--text);resize:none;transition:border-color .2s;
+  background:var(--bg);line-height:1.55;min-height:76px}
+.jtxt:focus{outline:none;border-color:var(--p);background:#fff}
+.jtxt::placeholder{color:#a0aec0}
+.jinput{width:100%;border:2px solid #e2e8f0;border-radius:9px;
+  padding:8px 12px;font-size:.85rem;font-family:inherit;
+  color:var(--text);transition:border-color .2s;background:#fff}
+.jinput:focus{outline:none;border-color:var(--teal)}
+.jinput::placeholder{color:#a0aec0}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}
+.chip{padding:5px 12px;border-radius:20px;border:2px solid #e2e8f0;
+  font-size:.78rem;cursor:pointer;background:#fff;
+  transition:all .18s;font-weight:600;color:var(--muted)}
+.chip:hover{border-color:var(--p);color:var(--p)}
+.chip.on{background:var(--p);border-color:var(--p);color:#fff;animation:pop .22s ease}
+
+/* INFO BOXES */
+.ib{background:linear-gradient(135deg,#f3eeff,#e8f4ff);border-radius:10px;
+  padding:12px 13px;margin:10px 0;font-size:.83rem;color:var(--text);
+  line-height:1.55;border-left:4px solid var(--p)}
+.ib strong{color:var(--p)}
+.ib.teal{background:linear-gradient(135deg,#e6fffa,#ebf8ff);border-color:var(--teal)}
+.ib.teal strong{color:var(--teal)}
+.ib.orange{background:#fffaf0;border-color:var(--orange)}
+.ib.orange strong{color:#c05621}
+.ib.green{background:#f0fff4;border-color:var(--green)}
+.ib.green strong{color:#276749}
+.ib.blue{background:#ebf4ff;border-color:var(--blue)}
+.ib.blue strong{color:#2c5282}
+.ib.red{background:#fff5f5;border-color:var(--red)}
+.ib.red strong{color:#9b2c2c}
+
+/* PROGRESS BAR */
+.pbar-wrap{background:var(--bg);border-radius:7px;height:6px;margin:13px 0;overflow:hidden}
+.pbar{height:100%;background:linear-gradient(90deg,var(--p),var(--teal));
+  border-radius:7px;transition:width .45s ease;width:0%}
+
+/* ZONE CARD */
+.zcard{text-align:center;padding:17px;background:var(--bg);
+  border-radius:13px;margin-bottom:13px;transition:transform .3s}
+.zicon{font-size:2.6rem;margin-bottom:6px}
+.zname{font-weight:800;font-size:1.05rem;color:var(--text)}
+.zq{color:var(--muted);font-size:.83rem;margin-top:6px;line-height:1.5}
+.zn{font-size:.73rem;color:var(--muted);margin-top:6px}
+
+/* SENSE ROWS */
+.srow{background:var(--bg);border-radius:10px;padding:10px 12px;
+  display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.sico{font-size:1.25rem;flex-shrink:0;margin-top:2px}
+.slabel{font-size:.7rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+
+/* RESCUE OPTIONS */
+.ropt{display:flex;gap:12px;align-items:center;padding:12px 14px;
+  background:var(--bg);border-radius:11px;cursor:pointer;
+  transition:all .2s;border:2px solid transparent;margin-bottom:8px}
+.ropt:hover{border-color:#e85d5d;background:#fff5f5;transform:translateX(3px)}
+.ropt-ico{font-size:1.65rem;flex-shrink:0}
+.ropt-info strong{font-size:.86rem;display:block;color:var(--text)}
+.ropt-info span{font-size:.76rem;color:var(--muted)}
+
+/* BUTTONS */
+.btns{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;padding:12px;border-radius:12px;border:none;
+  cursor:pointer;font-size:.88rem;font-weight:700;transition:all .2s}
+.bp{background:linear-gradient(135deg,var(--p),var(--p2));
+  color:#fff;box-shadow:0 4px 13px rgba(124,92,191,.28)}
+.bp:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(124,92,191,.36)}
+.bp:active{transform:scale(.98)}
+.bs{background:var(--bg);color:var(--muted)}.bs:hover{background:#e2e8f0}
+.bt{background:linear-gradient(135deg,var(--teal),#4299e1);color:#fff;
+  box-shadow:0 4px 13px rgba(44,158,152,.24)}.bt:hover{transform:translateY(-2px)}
+.bo{background:linear-gradient(135deg,var(--orange),#f6ad55);color:#fff}
+
+/* COMPLETION */
+.done{text-align:center;padding:16px;animation:fup .5s ease}
+.done-em{font-size:3.6rem;margin-bottom:13px;animation:bnc .6s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes bnc{0%{transform:scale(0)}60%{transform:scale(1.2)}80%{transform:scale(.9)}100%{transform:scale(1)}}
+.done h2{font-size:1.45rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.done p{color:var(--muted);line-height:1.6;font-size:.86rem}
+.xp{display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,#f6d365,#fda085);
+  color:#fff;padding:6px 17px;border-radius:20px;
+  font-weight:700;font-size:.88rem;margin:13px 0;animation:pop .5s ease .3s both}
+
+/* DISTORTION CARDS (CBT tab) */
+.dc{background:var(--card);border-radius:13px;padding:13px 15px;
+  margin-bottom:9px;box-shadow:var(--sh);cursor:pointer;
+  transition:all .22s;border:2px solid transparent;animation:fup .4s ease both}
+.dc:hover{border-color:var(--p)45;transform:translateY(-1px)}
+.dc.open{border-color:var(--p)}
+.dhdr{display:flex;align-items:center;gap:9px}
+.dnum{width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  color:#fff;font-size:.72rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dname{font-weight:700;font-size:.88rem;flex:1}
+.darr{color:var(--muted);transition:transform .3s;font-size:1rem}
+.dc.open .darr{transform:rotate(90deg)}
+.dbody{display:none;margin-top:11px;padding-top:11px;border-top:1px solid #e2e8f0}
+.dc.open .dbody{display:block}
+.ddef{font-size:.83rem;color:var(--muted);line-height:1.55;margin-bottom:7px}
+.dadhd{background:#f3eeff;border-left:3px solid var(--p);
+  padding:9px 11px;border-radius:7px;font-size:.8rem;color:var(--text);line-height:1.5}
+.dadhd strong{color:var(--p)}
+
+/* CHALLENGE CARDS (CBT tab) */
+.cc{background:var(--card);border-radius:13px;padding:13px 15px;
+  margin-bottom:9px;box-shadow:var(--sh);border-left:4px solid var(--teal);
+  animation:fup .4s ease both}
+.cc h3{font-size:.88rem;font-weight:700;color:var(--teal);margin-bottom:5px}
+.cc p{font-size:.81rem;color:var(--muted);line-height:1.55}
+
+/* DBT CARDS */
+.dbt-card{background:var(--card);border-radius:13px;padding:14px 16px;
+  margin-bottom:10px;box-shadow:var(--sh);border-left:4px solid var(--teal);
+  animation:fup .4s ease both}
+.dbt-card h3{font-size:.9rem;font-weight:700;color:var(--teal);margin-bottom:6px}
+.dbt-card p{font-size:.82rem;color:var(--muted);line-height:1.55;margin-bottom:6px}
+.dbt-card.orange{border-color:var(--orange)}.dbt-card.orange h3{color:var(--orange)}
+.dbt-card.blue{border-color:var(--blue)}.dbt-card.blue h3{color:var(--blue)}
+.dbt-card.red{border-color:var(--red)}.dbt-card.red h3{color:var(--red)}
+
+/* SAFETY BEHAVIOR CHIPS (multi-select) */
+.sb-chip{padding:7px 12px;border-radius:20px;border:2px solid #e2e8f0;
+  font-size:.78rem;cursor:pointer;background:#fff;
+  transition:all .18s;font-weight:600;color:var(--muted);margin:3px}
+.sb-chip:hover{border-color:var(--red);color:var(--red)}
+.sb-chip.on{background:var(--red);border-color:var(--red);color:#fff;animation:pop .22s ease}
+
+/* ACCEPTS STEP */
+.accepts-step{background:var(--bg);border-radius:12px;padding:14px 15px;margin-bottom:10px}
+.as-letter{font-size:2rem;font-weight:800;color:var(--teal);line-height:1}
+.as-word{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.as-desc{font-size:.82rem;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.as-opts{display:flex;flex-direction:column;gap:6px}
+.as-opt{padding:9px 12px;border-radius:9px;border:2px solid #e2e8f0;
+  background:#fff;cursor:pointer;font-size:.82rem;font-weight:600;
+  color:var(--text);transition:all .18s;text-align:left}
+.as-opt:hover{border-color:var(--teal);color:var(--teal)}
+.as-opt.on{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* TOLLE PRINCIPLES */
+.principle{background:var(--card);border-radius:13px;padding:15px 17px;
+  margin-bottom:10px;box-shadow:var(--sh);border-left:4px solid var(--p);
+  animation:fup .4s ease both}
+.principle h3{font-size:.9rem;font-weight:700;color:var(--p);margin-bottom:5px}
+.principle p{font-size:.83rem;color:var(--muted);line-height:1.55}
+.principle:nth-child(2){border-color:var(--teal)}.principle:nth-child(2) h3{color:var(--teal)}
+.principle:nth-child(3){border-color:var(--pink)}.principle:nth-child(3) h3{color:var(--pink)}
+.principle:nth-child(4){border-color:var(--orange)}.principle:nth-child(4) h3{color:var(--orange)}
+.principle:nth-child(5){border-color:var(--green)}.principle:nth-child(5) h3{color:var(--green)}
+.principle:nth-child(6){border-color:var(--p2)}.principle:nth-child(6) h3{color:var(--p2)}
+
+/* SEG CONTROL */
+.seg{display:flex;background:#e2e8f0;border-radius:10px;padding:3px;margin-bottom:14px;gap:2px}
+.sego{flex:1;background:none;border:none;border-radius:8px;
+  padding:7px 4px;font-size:.75rem;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:all .2s;text-align:center}
+.sego.on{background:#fff;color:var(--p);box-shadow:0 2px 7px rgba(0,0,0,.09)}
+
+/* TAB HEADER */
+.tab-hdr{padding:6px 0 2px;animation:fup .4s ease both}
+.tab-hdr h2{font-size:1.1rem;font-weight:800;color:var(--p);margin-bottom:2px}
+.tab-hdr p{font-size:.8rem;color:var(--muted);line-height:1.5}
+
+/* DIST PICKER GRID */
+.dpick{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
+.dp{padding:8px 10px;border-radius:9px;border:2px solid #e2e8f0;
+  background:#fff;cursor:pointer;transition:all .2s;
+  font-size:.76rem;font-weight:600;color:var(--muted);text-align:center}
+.dp:hover{border-color:var(--p);color:var(--p)}
+.dp.on{background:var(--p);border-color:var(--p);color:#fff;animation:pop .22s ease}
+
+/* RADICAL ACCEPTANCE */
+.ra-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.ra-box{border-radius:10px;padding:11px 12px;font-size:.8rem;line-height:1.5}
+.ra-box.bad{background:#fff5f5;border-left:3px solid var(--red);color:#9b2c2c}
+.ra-box.good{background:#f0fff4;border-left:3px solid var(--green);color:#276749}
+.ra-box strong{display:block;font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:5px;opacity:.7}
+
+/* SELF-SOOTHE GRID */
+.soothe-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.soothe-btn{background:var(--bg);border:2px solid #e2e8f0;border-radius:12px;
+  padding:13px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.soothe-btn:hover{transform:translateY(-2px);border-color:var(--teal)}
+.soothe-btn.on{background:linear-gradient(135deg,var(--teal),#4299e1);
+  border-color:transparent;color:#fff}
+.soothe-ico{font-size:1.8rem;margin-bottom:5px}
+.soothe-lbl{font-size:.78rem;font-weight:700;color:var(--text)}
+.soothe-btn.on .soothe-lbl{color:#fff}
+.soothe-detail{display:none;margin:10px 0;animation:fup .3s ease}
+.soothe-detail.on{display:block}
+
+/* TIMER */
+.tbig{font-size:2.3rem;font-weight:800;color:var(--p);text-align:center;margin:10px 0}
+.tlbl{font-size:.76rem;color:var(--muted);text-align:center;margin-top:-7px}
+
+/* CONFETTI */
+.cfx{position:fixed;inset:0;pointer-events:none;z-index:500}
+.cf{position:absolute;top:-10px;border-radius:2px;opacity:0;
+  animation:cfall var(--cd) ease var(--cx) both}
+@keyframes cfall{0%{opacity:1;transform:translateY(0)rotate(0deg)}100%{opacity:0;transform:translateY(100vh)rotate(720deg)}}
+
+@keyframes fup{from{opacity:0;transform:translateY(17px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.11)}100%{transform:scale(1)}}
+
+/* ── TASKS TAB ─────────────────────────────────────────── */
+/* MIT card */
+.mit-card{border-radius:var(--r);padding:16px 18px;margin-bottom:14px;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  box-shadow:0 6px 22px rgba(124,92,191,.32);position:relative;overflow:hidden;
+  animation:fup .5s ease both}
+.mit-card::before{content:'★ FOCUS';position:absolute;top:10px;right:13px;
+  font-size:.58rem;font-weight:800;color:rgba(255,255,255,.4);letter-spacing:.1em}
+.mit-label{font-size:.66rem;font-weight:800;color:rgba(255,255,255,.6);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.mit-text{font-size:1.05rem;font-weight:700;color:#fff;line-height:1.4;word-break:break-word}
+.mit-actions{display:flex;gap:7px;margin-top:10px}
+.mit-btn{background:rgba(255,255,255,.18);border:none;color:#fff;
+  padding:5px 12px;border-radius:20px;font-size:.75rem;font-weight:700;
+  cursor:pointer;transition:all .18s}
+.mit-btn:hover{background:rgba(255,255,255,.3)}
+.mit-empty{text-align:center;padding:12px;color:rgba(255,255,255,.65);font-size:.82rem}
+
+/* quick-add */
+.qadd{display:flex;gap:7px;margin-bottom:12px}
+.qadd-in{flex:1;border:2px solid #e2e8f0;border-radius:11px;
+  padding:10px 13px;font-size:.86rem;font-family:inherit;
+  color:var(--text);background:#fff;transition:border-color .2s}
+.qadd-in:focus{outline:none;border-color:var(--p)}
+.qadd-btn{background:var(--p);color:#fff;border:none;border-radius:11px;
+  width:42px;font-size:1.2rem;cursor:pointer;transition:all .18s;flex-shrink:0}
+.qadd-btn:hover{background:var(--p2);transform:scale(1.07)}
+
+/* task item */
+.task-item{background:var(--card);border-radius:13px;padding:12px 14px;
+  margin-bottom:8px;box-shadow:var(--sh);display:flex;align-items:flex-start;
+  gap:11px;animation:fup .35s ease both;transition:opacity .3s,transform .3s;
+  border:2px solid transparent;position:relative}
+.task-item.done-item{opacity:.45;transform:scale(.98)}
+.task-item.mit{border-color:var(--p);background:#fdf9ff}
+.task-cb{width:22px;height:22px;border-radius:50%;border:2.5px solid #cbd5e0;
+  cursor:pointer;flex-shrink:0;margin-top:1px;display:flex;align-items:center;
+  justify-content:center;transition:all .2s;background:#fff}
+.task-cb:hover{border-color:var(--p)}
+.task-cb.checked{background:var(--green);border-color:var(--green);animation:pop .3s ease}
+.task-cb.checked::after{content:'✓';color:#fff;font-size:.72rem;font-weight:800}
+.task-body{flex:1;min-width:0}
+.task-text{font-size:.88rem;color:var(--text);line-height:1.45;word-break:break-word}
+.task-item.done-item .task-text{text-decoration:line-through;color:var(--muted)}
+.task-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+.ttag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.ttag.quick{background:#fff8e1;color:#c05621}
+.ttag.pri-high{background:#fff5f5;color:var(--red)}
+.ttag.pri-med{background:#fffaf0;color:var(--orange)}
+.ttag.pri-low{background:#f0fff4;color:var(--green)}
+.ttag.mit-tag{background:#f3eeff;color:var(--p)}
+.ttag.carried{background:#ebf4ff;color:var(--blue)}
+.task-menu{display:flex;gap:5px;opacity:0;transition:opacity .2s;flex-shrink:0}
+.task-item:hover .task-menu{opacity:1}
+.tmb{background:none;border:none;cursor:pointer;font-size:.85rem;
+  padding:3px 5px;border-radius:6px;color:var(--muted);transition:all .15s}
+.tmb:hover{background:var(--bg);color:var(--text)}
+
+/* steps breakdown */
+.task-steps{margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;display:none}
+.task-steps.open{display:block}
+.tstep{display:flex;align-items:center;gap:8px;padding:5px 0}
+.tstep-cb{width:16px;height:16px;border-radius:4px;border:2px solid #cbd5e0;
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:all .18s}
+.tstep-cb.done{background:var(--teal);border-color:var(--teal)}
+.tstep-cb.done::after{content:'✓';color:#fff;font-size:.6rem;font-weight:800}
+.tstep-txt{font-size:.8rem;color:var(--muted)}
+.tstep-txt.done{text-decoration:line-through}
+
+/* task sections */
+.tsec{margin-bottom:20px}
+.tsec-hdr{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px}
+.tsec-title{font-size:.72rem;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em}
+.tsec-count{font-size:.69rem;color:var(--muted);background:var(--bg);
+  padding:2px 8px;border-radius:20px}
+.tadd-mini{font-size:.72rem;color:var(--p);font-weight:700;
+  background:none;border:none;cursor:pointer;padding:2px 6px}
+
+/* task progress */
+.tprog{background:var(--card);border-radius:var(--r);padding:12px 16px;
+  margin-bottom:13px;box-shadow:var(--sh);display:flex;align-items:center;gap:12px}
+.tprog-bar{flex:1;height:7px;background:#e2e8f0;border-radius:7px;overflow:hidden}
+.tprog-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--teal));
+  border-radius:7px;transition:width .6s cubic-bezier(.16,1,.3,1);width:0%}
+.tprog-txt{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.tprog-pct{font-size:1rem;font-weight:800;color:var(--p);min-width:36px;text-align:right}
+
+/* weekly goal card */
+.wgoal{background:var(--card);border-radius:13px;padding:13px 15px;
+  margin-bottom:9px;box-shadow:var(--sh);animation:fup .4s ease both}
+.wgoal-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.wgoal-ico{font-size:1.35rem}
+.wgoal-text{font-size:.9rem;font-weight:700;color:var(--text);flex:1}
+.wgoal-pct{font-size:.78rem;font-weight:700;color:var(--p)}
+.wgoal-bar{height:5px;background:#e2e8f0;border-radius:5px;overflow:hidden;margin-bottom:8px}
+.wgoal-fill{height:100%;border-radius:5px;transition:width .6s ease}
+.wgoal-btns{display:flex;gap:6px}
+.wg-btn{padding:4px 10px;border-radius:20px;border:none;font-size:.7rem;
+  font-weight:700;cursor:pointer;transition:all .18s}
+.wg-dec{background:#fff5f5;color:var(--red)}.wg-dec:hover{background:#fed7d7}
+.wg-inc{background:#f0fff4;color:var(--green)}.wg-inc:hover{background:#c6f6d5}
+.wg-del{background:var(--bg);color:var(--muted);margin-left:auto}
+.wg-del:hover{background:#e2e8f0}
+
+/* monthly goal */
+.mgoal{background:var(--card);border-radius:13px;padding:14px 16px;
+  margin-bottom:9px;box-shadow:var(--sh);animation:fup .4s ease both;
+  border-left:4px solid var(--p)}
+.mgoal:nth-child(2){border-color:var(--teal)}
+.mgoal:nth-child(3){border-color:var(--orange)}
+.mgoal-title{font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.mgoal-del{background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:.8rem;margin-left:auto;opacity:0;transition:opacity .2s}
+.mgoal:hover .mgoal-del{opacity:1}
+.milestone{display:flex;align-items:center;gap:9px;padding:5px 0;
+  border-bottom:1px solid #f0f4ff}
+.milestone:last-child{border-bottom:none}
+.ms-cb{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e0;
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;transition:all .2s}
+.ms-cb.done{background:var(--p);border-color:var(--p)}
+.ms-cb.done::after{content:'✓';color:#fff;font-size:.62rem;font-weight:800}
+.ms-txt{font-size:.82rem;color:var(--text)}
+.ms-txt.done{text-decoration:line-through;color:var(--muted)}
+
+/* focus timer (per-task) */
+.focus-timer{display:flex;align-items:center;gap:8px;padding:10px 12px;
+  background:linear-gradient(135deg,#f3eeff,#e8f4ff);border-radius:10px;
+  margin-top:8px}
+.ft-time{font-size:1.4rem;font-weight:800;color:var(--p)}
+.ft-label{font-size:.73rem;color:var(--muted)}
+.ft-btn{padding:5px 13px;border-radius:20px;border:none;font-size:.75rem;
+  font-weight:700;cursor:pointer;background:var(--p);color:#fff;transition:all .18s}
+.ft-btn:hover{background:var(--p2)}
+.ft-btn.stop{background:var(--red)}
+
+/* tab seg */
+.task-seg{display:flex;background:#e2e8f0;border-radius:10px;padding:3px;
+  margin-bottom:16px;gap:2px}
+.task-sego{flex:1;background:none;border:none;border-radius:8px;
+  padding:7px 4px;font-size:.73rem;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:all .2s;text-align:center}
+.task-sego.on{background:#fff;color:var(--p);box-shadow:0 2px 7px rgba(0,0,0,.09)}
+
+/* empty state */
+.empty-state{text-align:center;padding:28px 20px;color:var(--muted)}
+.empty-ico{font-size:2.6rem;margin-bottom:9px}
+.empty-msg{font-size:.86rem;line-height:1.6}
+
+/* add goal modal body */
+.goal-form{padding:4px 0}
+.gf-lbl{font-size:.75rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;margin:10px 0 5px}
+</style>
+</head>
+<body>
+
+<div class="orbs">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+</div>
+<div class="cfx" id="cfx"></div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="msheet" id="msheet">
+    <div class="drag"></div>
+    <button class="mclose" id="mclose">✕</button>
+    <div id="mbody"></div>
+  </div>
+</div>
+
+<div class="app">
+
+  <header class="hdr">
+    <div class="hdr-logo">🌀 Now</div>
+    <div class="hdr-sub">Presence · CBT · DBT · Mindfulness — for ADHD minds</div>
+  </header>
+
+  <!-- ── HOME ── -->
+  <div class="tab on" id="tab-home">
+
+    <div class="quote" id="qcard" onclick="nextQ()">
+      <div class="q-text" id="qtxt">…</div>
+      <div class="q-src">— Eckhart Tolle, The Power of Now</div>
+      <div class="q-tap">tap for next quote</div>
+    </div>
+
+    <div class="mood">
+      <div class="sec-lbl">How are you right now?</div>
+      <div class="moods">
+        <button class="mbtn" data-m="overwhelmed">😵‍💫</button>
+        <button class="mbtn" data-m="anxious">😰</button>
+        <button class="mbtn" data-m="restless">😤</button>
+        <button class="mbtn" data-m="okay">😐</button>
+        <button class="mbtn" data-m="calm">😊</button>
+      </div>
+      <div class="mtxt" id="mtxt"></div>
+    </div>
+
+    <div class="prog">
+      <div>
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <defs>
+            <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c5cbf"/>
+              <stop offset="100%" stop-color="#5b6abf"/>
+            </linearGradient>
+          </defs>
+          <circle class="rbg" cx="28" cy="28" r="22"/>
+          <circle class="rfill" id="rfill" cx="28" cy="28" r="22"/>
+        </svg>
+      </div>
+      <div class="prog-info">
+        <strong id="ptxt">0 of 10 done today</strong>
+        <span id="stxt">🔥 0-day streak</span>
+        <div class="prog-cta" id="pcta">Start your first session →</div>
+      </div>
+    </div>
+
+    <button class="rescue" onclick="openEx('rescue')">
+      <div class="rr">
+        <span class="ri">🆘</span>
+        <div><div class="rt">Mind spiraling? Tap here.</div>
+          <div class="rs">60-second reset · no setup needed</div></div>
+        <div class="rd"></div>
+      </div>
+    </button>
+
+    <div class="slbl">🧘 Presence practices</div>
+    <div class="cards" id="ecards">
+      <div class="card" data-ex="breath">
+        <div class="ci">🌬️</div>
+        <div class="c-info">
+          <div class="cn">Breath Awareness</div>
+          <div class="cd">Anchor in the present. Your breath only exists right now.</div>
+          <div class="cm"><span class="ct">2 min</span><span class="ctag">Beginner · Calming</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="bodyscan">
+        <div class="ci">🧘</div>
+        <div class="c-info">
+          <div class="cn">Body Scan</div>
+          <div class="cd">When your mind won't stop, your body always can.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">Grounding</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="thoughts">
+        <div class="ci">💭</div>
+        <div class="c-info">
+          <div class="cn">Thought Catcher + CBT</div>
+          <div class="cd">Write → identify distortion → challenge → release.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">CBT · Interactive</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="ego">
+        <div class="ci">🎭</div>
+        <div class="c-info">
+          <div class="cn">Ego Observer</div>
+          <div class="cd">Notice the inner critic. See it — then it loses its grip.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">Tolle · Advanced</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="senses">
+        <div class="ci">👁️</div>
+        <div class="c-info">
+          <div class="cn">5 Senses Grounding</div>
+          <div class="cd">Your senses only exist right now. Reality check.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">ADHD favourite</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="acceptance">
+        <div class="ci">🌊</div>
+        <div class="c-info">
+          <div class="cn">Radical Acceptance</div>
+          <div class="cd">Stop fighting what is. Accept → act. Tolle + DBT.</div>
+          <div class="cm"><span class="ct">2 min</span><span class="ctag">DBT · Tolle</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slbl">🛡️ DBT & social skills</div>
+    <div class="cards">
+      <div class="card" data-ex="accepts">
+        <div class="ci">🎯</div>
+        <div class="c-info">
+          <div class="cn">ACCEPTS Toolkit</div>
+          <div class="cd">DBT distress survival. Ride out overwhelming feelings.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">DBT · Crisis tool</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="selfsoothe">
+        <div class="ci">🌸</div>
+        <div class="c-info">
+          <div class="cn">Self-Soothe with Senses</div>
+          <div class="cd">Calm your nervous system through pleasurable sensation.</div>
+          <div class="cm"><span class="ct">2 min</span><span class="ctag">DBT · Calming</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="safetybehaviors">
+        <div class="ci">🛡️</div>
+        <div class="c-info">
+          <div class="cn">Safety Behaviors Check</div>
+          <div class="cd">Identify what you do to avoid social anxiety — and why it backfires.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">Social anxiety · Awareness</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="selfsoothe2">
+        <div class="ci">💆</div>
+        <div class="c-info">
+          <div class="cn">Emotional First Aid</div>
+          <div class="cd">Quick 5-step plan for when emotions flood your ADHD brain.</div>
+          <div class="cm"><span class="ct">2 min</span><span class="ctag">DBT · ADHD</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slbl">🧘 Mindfulness practice</div>
+    <div class="cards">
+      <div class="card" data-ex="mindfulactivity">
+        <div class="ci">🚶</div>
+        <div class="c-info">
+          <div class="cn">Mindful Activity</div>
+          <div class="cd">Turn any daily task into a presence practice — senses on, mind quiet.</div>
+          <div class="cm"><span class="ct">3 min</span><span class="ctag">DBT · ADHD daily habit</span></div>
+        </div>
+      </div>
+      <div class="card" data-ex="mindfulmeditation">
+        <div class="ci">🪷</div>
+        <div class="c-info">
+          <div class="cn">Mindful Meditation</div>
+          <div class="cd">6-step guided practice. Observe thoughts without judgment — then let go.</div>
+          <div class="cm"><span class="ct">10 min</span><span class="ctag">DBT · Intermediate</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── CBT TAB ── -->
+  <div class="tab" id="tab-cbt">
+    <div class="tab-hdr">
+      <h2>🧠 Cognitive Distortions</h2>
+      <p>From David Burns' CBT workbook. Spot the pattern → break the loop.</p>
+    </div>
+    <div class="seg" style="margin-top:13px">
+      <button class="sego on" data-sg="distortions">10 Distortions</button>
+      <button class="sego" data-sg="challenges">Challenge Toolkit</button>
+    </div>
+    <div id="sg-distortions">
+      <div class="ib teal" style="margin-bottom:13px">
+        <strong>Why this matters for ADHD:</strong> ADHD brains are more prone to emotional reasoning, all-or-nothing thinking, and labeling ("I'm broken", "I always fail"). Naming the distortion breaks its power.
+      </div>
+      <div class="dc" data-d="0"><div class="dhdr"><div class="dnum">1</div><div class="dname">All-or-Nothing Thinking</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You see things in absolute black-and-white. If a situation falls short of perfect, you see it as a total failure.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "I missed one task — the whole day is ruined." "I got distracted once — I can never focus." Fuels task paralysis and shame spirals.</div></div></div>
+      <div class="dc" data-d="1"><div class="dhdr"><div class="dnum">2</div><div class="dname">Overgeneralization</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You view a single negative event as a never-ending pattern using words like "always" or "never."</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "I always forget things." "I never finish what I start." Each instance feels like proof of a permanent truth.</div></div></div>
+      <div class="dc" data-d="2"><div class="dhdr"><div class="dnum">3</div><div class="dname">Mental Filter</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You pick one negative detail and dwell on it exclusively, like a drop of ink darkening a whole glass of water.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> Got 9 things right, 1 wrong. You obsess over the 1 for the rest of the day while ignoring all 9 wins.</div></div></div>
+      <div class="dc" data-d="3"><div class="dhdr"><div class="dnum">4</div><div class="dname">Discounting the Positives</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You reject positive experiences by insisting they "don't count."</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "I only finished because I set 10 alarms — that doesn't count." You dismiss every coping tool as cheating.</div></div></div>
+      <div class="dc" data-d="4"><div class="dhdr"><div class="dnum">5</div><div class="dname">Jumping to Conclusions</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">Mind reading (assuming what others think) or fortune telling (predicting bad outcomes) without real evidence.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "They didn't reply — they're annoyed at me." (RSD classic.) "I'll definitely bomb this." You catastrophize before any evidence exists.</div></div></div>
+      <div class="dc" data-d="5"><div class="dhdr"><div class="dnum">6</div><div class="dname">Magnification or Minimization</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You catastrophize problems or shrink strengths. The "binocular trick" — always the wrong lens.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> A small mistake becomes catastrophic. A big achievement gets: "it wasn't that hard." Always distorted.</div></div></div>
+      <div class="dc" data-d="6"><div class="dhdr"><div class="dnum">7</div><div class="dname">Emotional Reasoning</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You assume your negative emotions reflect reality. "I feel it, therefore it must be true."</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "I feel stupid — so I must be stupid." ADHD emotional dysregulation (RSD) makes this extremely powerful and painful.</div></div></div>
+      <div class="dc" data-d="7"><div class="dhdr"><div class="dnum">8</div><div class="dname">"Should" Statements</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You criticize yourself with "shoulds," "shouldn'ts," "musts," "oughts." Creates guilt, shame, and rebellion.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "I should be able to focus like everyone else." "I shouldn't need reminders." Creates the shame spiral that makes ADHD worse.</div></div></div>
+      <div class="dc" data-d="8"><div class="dhdr"><div class="dnum">9</div><div class="dname">Labeling</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">Instead of "I made a mistake" you say "I'm a jerk," "a fool," "a loser." You are not the same as what you do.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "I'm broken." "I'm lazy." "I'm stupid." These feel like facts — they're not. They're the most damaging thought pattern for ADHD self-esteem.</div></div></div>
+      <div class="dc" data-d="9"><div class="dhdr"><div class="dnum">10</div><div class="dname">Personalization & Blame</div><div class="darr">›</div></div>
+        <div class="dbody"><div class="ddef">You hold yourself responsible for events not entirely under your control — or blame others and overlook your own role.</div>
+        <div class="dadhd"><strong>ADHD version:</strong> "My team failed because of my ADHD." Or the flip: "Nothing is ever my fault — the world doesn't accommodate me." Both block growth.</div></div></div>
+      <button class="btn bp" style="width:100%;margin-top:13px" onclick="openEx('thoughts')">Try the Thought Catcher Exercise →</button>
+    </div>
+    <div id="sg-challenges" style="display:none">
+      <div class="ib" style="margin-bottom:13px"><strong>10 techniques</strong> directly from Burns' CBT workbook. Each dismantles a distorted thought.</div>
+      <div class="cc"><h3>1. Identify the Distortion</h3><p>Write the thought, then name the distortion. This single step creates distance — and distance creates freedom.</p></div>
+      <div class="cc"><h3>2. Examine the Evidence</h3><p>List actual evidence for and against the thought. Real data, not feelings. What have you actually done successfully?</p></div>
+      <div class="cc"><h3>3. Double-Standard Method</h3><p>Talk to yourself in the same compassionate way you'd talk to a friend with the same problem. Would you say this to them?</p></div>
+      <div class="cc"><h3>4. The Experimental Technique</h3><p>Run an experiment to test your negative belief. Afraid your heart is unhealthy? Go jog. Let data replace fear.</p></div>
+      <div class="cc"><h3>5. Shades of Gray</h3><p>Rate things on 0–100 instead of pass/fail. A partial success is not a total failure. What % did you succeed today?</p></div>
+      <div class="cc"><h3>6. The Survey Method</h3><p>Ask others if your thought is realistic. Do your friends also feel nervous before talks? Do they also forget things?</p></div>
+      <div class="cc"><h3>7. Define Your Terms</h3><p>When you label yourself "a fool" — define what that actually means. There is no universal "fool." The label collapses under examination.</p></div>
+      <div class="cc"><h3>8. The Semantic Method</h3><p>Replace "I should exercise" with "I could exercise." Remove the punishment. Replace coercion with invitation.</p></div>
+      <div class="cc"><h3>9. Re-attribution</h3><p>List every factor that contributed to a problem — not just you. Distribute responsibility accurately, not entirely on yourself.</p></div>
+      <div class="cc"><h3>10. Cost–Benefit Analysis</h3><p>How does believing this thought help you? How does it hurt you? This replaces guilt with a clear-eyed choice.</p></div>
+    </div>
+  </div>
+
+  <!-- ── DBT TAB ── -->
+  <div class="tab" id="tab-dbt">
+    <div class="tab-hdr">
+      <h2>🛡️ DBT Skills</h2>
+      <p>Distress tolerance from Dialectical Behaviour Therapy + social anxiety tools.</p>
+    </div>
+    <br>
+    <div class="dbt-card">
+      <h3>Radical Acceptance</h3>
+      <p>When a problem is out of your control, fighting it only adds pain. Radical acceptance means recognizing and accepting the situation as it is — not liking it, just not fighting it.</p>
+      <div class="ra-compare">
+        <div class="ra-box bad"><strong>Typical thinking</strong>"This isn't fair. I shouldn't have this problem. Why does this always happen to me?"</div>
+        <div class="ra-box good"><strong>Radical acceptance</strong>"It's frustrating, and I accept it's happening. Now — what can I actually do?"</div>
+      </div>
+      <div class="ib" style="margin-top:8px;margin-bottom:0"><strong>ADHD note:</strong> Acceptance cuts the shame spiral. You can't focus better by hating that you can't focus.</div>
+    </div>
+
+    <div class="dbt-card orange">
+      <h3>ACCEPTS — Distress Distraction</h3>
+      <p>When emotions are overwhelming, distraction isn't avoidance — it's survival. A.C.C.E.P.T.S. gives you a menu of ways to ride out a wave until it passes.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>A</strong>ctivities</div>
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>C</strong>ontributing</div>
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>C</strong>omparisons</div>
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>E</strong>motions</div>
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>P</strong>ushing away</div>
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>T</strong>houghts</div>
+        <div class="ib orange" style="margin:0;padding:8px 10px"><strong>S</strong>ensations</div>
+      </div>
+    </div>
+
+    <div class="dbt-card">
+      <h3>Self-Soothe with Senses</h3>
+      <p>Find a pleasurable way to engage each sense. Positive sensory input directly calms the nervous system — no thinking required.</p>
+      <div class="ib teal" style="margin-bottom:0"><strong>ADHD note:</strong> Sensory seeking is common in ADHD. Use it intentionally — a warm drink, a walk, music you love.</div>
+    </div>
+
+    <div class="dbt-card red">
+      <h3>Safety Behaviors & Social Anxiety</h3>
+      <p>Safety behaviors are subtle actions (avoiding eye contact, speaking softly, rehearsing scripts, using your phone as a shield) that provide short-term relief but maintain — and increase — anxiety long-term.</p>
+      <p style="margin-top:6px"><strong style="color:var(--red)">The cycle:</strong> Anxiety → Safety behavior → Temporary relief → Anxiety grows next time.</p>
+      <div class="ib red" style="margin-bottom:0"><strong>ADHD + RSD version:</strong> Masking, over-explaining, people-pleasing, and interrupting to keep control are all safety behaviors driven by fear of rejection.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;grid-template-columns:1fr 1fr;margin-top:14px">
+      <button class="btn bt" onclick="openEx('accepts')">Try ACCEPTS →</button>
+      <button class="btn bo" onclick="openEx('safetybehaviors')">Safety Check →</button>
+    </div>
+    <button class="btn bp" style="width:100%;margin-top:8px" onclick="openEx('selfsoothe')">Self-Soothe with Senses →</button>
+  </div>
+
+  <!-- ── TOLLE TAB ── -->
+  <div class="tab" id="tab-tolle">
+    <div class="tab-hdr">
+      <h2>📖 The Power of Now</h2>
+      <p>Core principles from Eckhart Tolle — adapted for ADHD minds.</p>
+    </div>
+    <br>
+    <div class="principle"><h3>The Now is All You Have</h3><p>Your ADHD mind races between past regrets and future worries — but life only happens now. This moment is your only real access point to peace and action.</p></div>
+    <div class="principle"><h3>You Are Not Your Thoughts</h3><p>The endless mental chatter is not "you." You are the awareness watching those thoughts. When you can observe a thought, you are already free from it.</p></div>
+    <div class="principle"><h3>The Pain Body</h3><p>We accumulate emotional pain that lives in the body. For ADHD brains, this often feels like restlessness, emotional dysregulation, or constant tension. Awareness begins to dissolve it.</p></div>
+    <div class="principle"><h3>Acceptance Over Resistance</h3><p>What you resist, persists. Acceptance means: "This is here. Now what do I do?" Then action becomes clear instead of paralysed.</p></div>
+    <div class="principle"><h3>The Ego Creates Suffering</h3><p>The ego needs drama, needs to be right, compares constantly. For ADHD minds, this shows up as self-criticism and shame spirals. Seeing the ego is the first step out.</p></div>
+    <div class="principle"><h3>Body = Your Portal to Now</h3><p>When your mind is out of control, your body is the shortcut back. Breath, sensations, movement — these only happen now. Always free, always available.</p></div>
+    <div class="ib" style="margin-top:16px"><strong>Tolle + CBT + DBT together:</strong> Tolle says "you are not your thoughts." Burns says "your thoughts are distorted — examine them." DBT says "when it's unbearable, survive the wave." All three together = a complete ADHD toolkit.</div>
+  </div>
+
+  <!-- ── TASKS TAB ── -->
+  <div class="tab" id="tab-tasks">
+
+    <div class="tab-hdr">
+      <h2>📋 Tasks & Goals</h2>
+      <p>Small wins daily. Big goals monthly. Your ADHD brain needs structure that <em>bends</em>.</p>
+    </div>
+    <br>
+
+    <div class="task-seg" id="taskSeg">
+      <button class="task-sego on" data-ts="today">Today</button>
+      <button class="task-sego" data-ts="weekly">This Week</button>
+      <button class="task-sego" data-ts="monthly">Monthly</button>
+    </div>
+
+    <!-- TODAY panel -->
+    <div id="ts-today">
+      <!-- MIT -->
+      <div class="mit-card" id="mitCard">
+        <div class="mit-label">⭐ Most Important Task</div>
+        <div id="mitBody">
+          <div class="mit-empty">No task set as your #1 focus yet.<br>Add a task below, then ★ it.</div>
+        </div>
+      </div>
+
+      <!-- progress -->
+      <div class="tprog" id="dayProg">
+        <div class="tprog-bar"><div class="tprog-fill" id="dayFill"></div></div>
+        <div class="tprog-txt" id="dayTxt">0 done</div>
+        <div class="tprog-pct" id="dayPct">0%</div>
+      </div>
+
+      <!-- quick add -->
+      <div class="qadd">
+        <input class="qadd-in" id="taskInput" placeholder="Add a task… (press Enter or ＋)" autocomplete="off">
+        <button class="qadd-btn" id="taskAddBtn">＋</button>
+      </div>
+
+      <!-- task list -->
+      <div class="tsec">
+        <div class="tsec-hdr">
+          <span class="tsec-title">📌 To do</span>
+          <span class="tsec-count" id="todoCount">0</span>
+        </div>
+        <div id="todoList"></div>
+      </div>
+
+      <div class="tsec" id="doneSection" style="display:none">
+        <div class="tsec-hdr">
+          <span class="tsec-title">✅ Done today</span>
+          <span class="tsec-count" id="doneCount">0</span>
+        </div>
+        <div id="doneList"></div>
+      </div>
+
+      <div class="ib teal" style="font-size:.8rem;margin-top:4px">
+        <strong>ADHD tip:</strong> ⚡ = 2 min or less — do it immediately. ★ = your #1 focus. Break any task that feels overwhelming using the 🔀 button.
+      </div>
+    </div>
+
+    <!-- WEEKLY panel -->
+    <div id="ts-weekly" style="display:none">
+      <div class="ib" style="margin-bottom:13px"><strong>3–5 goals max.</strong> More than 5 and your ADHD brain will ignore them all. Focus beats quantity every time.</div>
+      <div id="weeklyList"></div>
+      <button class="btn bp" style="width:100%;margin-top:4px" onclick="openAddGoal('weekly')">＋ Add weekly goal</button>
+      <div class="ib orange" style="margin-top:12px;font-size:.8rem">
+        <strong>Week resets every Sunday.</strong> Unfinished goals carry forward with a note — not as failures.
+      </div>
+    </div>
+
+    <!-- MONTHLY panel -->
+    <div id="ts-monthly" style="display:none">
+      <div class="ib" style="margin-bottom:13px"><strong>Up to 3 big goals.</strong> Each breaks into milestones — small checkpoints your brain can actually celebrate.</div>
+      <div id="monthlyList"></div>
+      <button class="btn bp" style="width:100%;margin-top:4px" onclick="openAddGoal('monthly')">＋ Add monthly goal</button>
+      <div class="ib teal" style="margin-top:12px;font-size:.8rem">
+        <strong>Month resets on the 1st.</strong> Progress carries forward. You're building momentum, not starting over.
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /app -->
+
+<nav class="bnav">
+  <button class="nb on" data-t="home"><span class="ni">🏠</span>Home</button>
+  <button class="nb" data-t="tasks"><span class="ni">📋</span>Tasks</button>
+  <button class="nb" data-t="cbt"><span class="ni">🧠</span>CBT</button>
+  <button class="nb" data-t="dbt"><span class="ni">🛡️</span>DBT</button>
+  <button class="nb" data-t="tolle"><span class="ni">📖</span>Tolle</button>
+</nav>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────
+const S={
+  streak:+localStorage.getItem('nw_streak')||0,
+  todayDone:JSON.parse(localStorage.getItem('nw_done')||'[]'),
+  total:+localStorage.getItem('nw_total')||0,
+  lastDate:localStorage.getItem('nw_date')||'',
+  qIdx:+localStorage.getItem('nw_qidx')||0,
+  timer:null
+};
+const TODAY=new Date().toDateString();
+if(S.lastDate!==TODAY){S.todayDone=[];save('nw_done',JSON.stringify([]));}
+function save(k,v){localStorage.setItem(k,v)}
+
+// ── QUOTES ─────────────────────────────────────────────────────────
+const Q=[
+  "Realize deeply that the present moment is all you ever have.",
+  "The primary cause of unhappiness is never the situation but your thoughts about it.",
+  "Wherever you are, be there totally.",
+  "Life is now. There was never a time when your life was not now.",
+  "Accept — then act. Whatever the present moment contains, accept it as if you had chosen it.",
+  "You can't think your way into right action, but you can act your way into right thinking.",
+  "Don't look for peace. Don't look for any other state than the one you are in now.",
+  "If you get the inside right, the outside will fall into place.",
+  "The power for creating a better future is contained in the present moment.",
+  "Thinking has become a disease. The good news: there is a cure.",
+];
+
+// ── MOOD MESSAGES ──────────────────────────────────────────────────
+const MOODS={
+  overwhelmed:{msg:"That's valid. Try the ACCEPTS toolkit or a rescue reset 🆘",c:'#e05c5c'},
+  anxious:{msg:"Anxiety lives in the future. Let's return to now 🌬️",c:'#e8963a'},
+  restless:{msg:"Restless energy? Body Scan or Self-Soothe works best 🧘",c:'#d45f96'},
+  okay:{msg:"Solid starting point. Any exercise will help 👍",c:'#3aaa6a'},
+  calm:{msg:"Great state for deeper practice — try Ego Observer ✨",c:'#2c9e98'}
+};
+
+// ── DISTORTIONS ────────────────────────────────────────────────────
+const DISTS=[
+  {n:"All-or-nothing",r:"Is this really all bad, or is there a middle? Rate it 0–100 instead of pass/fail."},
+  {n:"Overgeneralization",r:"'Always' and 'never' are almost never true. What specific evidence counters this pattern?"},
+  {n:"Mental filter",r:"You're filtering out the positives. What went right today that you're ignoring right now?"},
+  {n:"Discounting positives",r:"If you did something good, it counts — even with accommodations. What did you actually accomplish?"},
+  {n:"Mind reading",r:"You're assuming. What's the actual evidence? Could there be another explanation for their behavior?"},
+  {n:"Fortune telling",r:"You're predicting disaster without data. What's the most realistic outcome — not worst-case?"},
+  {n:"Magnification",r:"On a scale of 1–100, how serious is this really? Would you still care about this in 5 years?"},
+  {n:"Emotional reasoning",r:"'I feel stupid' ≠ 'I am stupid.' Feelings are data, not facts. What's the actual evidence?"},
+  {n:"Should statements",r:"Replace 'should' with 'could.' Remove the punishment. What would you tell a friend in your position?"},
+  {n:"Labeling",r:"You are not a label. You're a person who has a struggle. What specifically happened — not who you 'are'?"},
+  {n:"Personalization",r:"List every factor that contributed. What's your realistic % of responsibility — not 0%, not 100%?"},
+];
+
+// ── INIT ───────────────────────────────────────────────────────────
+function init(){
+  document.getElementById('qtxt').textContent=Q[S.qIdx%Q.length];
+  updateStats();
+
+  document.querySelectorAll('.mbtn').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.mbtn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const m=MOODS[b.dataset.m];
+    const el=document.getElementById('mtxt');
+    el.textContent=m.msg; el.style.color=m.c;
+  }));
+
+  document.querySelectorAll('.card[data-ex]').forEach(c=>
+    c.addEventListener('click',()=>openEx(c.dataset.ex)));
+
+  document.querySelectorAll('.nb').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('tab-'+b.dataset.t).classList.add('on');
+    window.scrollTo(0,0);
+    if(b.dataset.t==='tasks') renderToday();
+  }));
+
+  initTaskTab();
+  document.getElementById('mclose').addEventListener('click',closeModal);
+  document.getElementById('modal').addEventListener('click',e=>{
+    if(e.target.id==='modal')closeModal();});
+
+  document.querySelectorAll('.dc').forEach(c=>
+    c.addEventListener('click',()=>c.classList.toggle('open')));
+
+  document.querySelectorAll('.sego').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.sego').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('[id^="sg-"]').forEach(x=>x.style.display='none');
+    document.getElementById('sg-'+b.dataset.sg).style.display='block';
+  }));
+}
+
+function nextQ(){
+  S.qIdx=(S.qIdx+1)%Q.length; save('nw_qidx',S.qIdx);
+  const el=document.getElementById('qtxt');
+  el.style.opacity=0;
+  setTimeout(()=>{el.textContent=Q[S.qIdx];el.style.opacity=1;},280);
+}
+
+function updateStats(){
+  const n=S.todayDone.length, total=12;
+  document.getElementById('ptxt').textContent=`${n} of ${total} done today`;
+  document.getElementById('stxt').textContent=`🔥 ${S.streak}-day streak`;
+  document.getElementById('pcta').textContent=
+    n===total?'All done! Amazing 🎉':n>0?`${total-n} more to go!`:'Start your first session →';
+  document.getElementById('rfill').style.strokeDashoffset=201*(1-n/total);
+  document.querySelectorAll('.card[data-ex]').forEach(c=>{
+    if(S.todayDone.includes(c.dataset.ex)){
+      c.style.opacity='.62';
+      if(!c.querySelector('.cdone')){
+        const d=document.createElement('div');d.className='cdone';d.textContent='✓';c.appendChild(d);}
+    }
+  });
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────
+function openEx(t){
+  const map={breath,bodyscan,thoughts,acceptance,senses,ego,rescue,accepts,selfsoothe,safetybehaviors,selfsoothe2,mindfulactivity,mindfulmeditation};
+  if(!map[t])return;
+  document.getElementById('mbody').innerHTML='';
+  map[t]();
+  document.getElementById('modal').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('on');
+  document.body.style.overflow='';
+  if(S.timer){clearInterval(S.timer);S.timer=null;}
+}
+function complete(type,xp=10){
+  if(S.timer){clearInterval(S.timer);S.timer=null;}
+  if(!S.todayDone.includes(type)){
+    S.todayDone.push(type); save('nw_done',JSON.stringify(S.todayDone));
+    S.total++; save('nw_total',S.total);
+    if(S.lastDate!==TODAY){S.streak++;save('nw_streak',S.streak);S.lastDate=TODAY;save('nw_date',TODAY);}
+  }
+  updateStats(); confetti();
+  const msgs=[
+    ["You just came back to yourself. 🌿","That's the whole practice."],
+    ["Present moment: unlocked. ✨","Your mind got a little quieter just now."],
+    ["You observed instead of reacted. 🎯","That gap between stimulus and response? That's freedom."],
+    ["One breath, one return. 🫁","Every time you notice you've wandered — that IS the practice."],
+    ["Distress survived. 🛡️","You rode the wave. It always passes."],
+  ];
+  const[h,sub]=msgs[Math.floor(Math.random()*msgs.length)];
+  document.getElementById('mbody').innerHTML=`
+    <div class="done"><div class="done-em">✨</div>
+      <h2>${h}</h2><p>${sub}</p>
+      <div class="xp">+${xp} XP · ${S.todayDone.length}/12 today</div>
+      <div class="btns">
+        <button class="btn bs" onclick="closeModal()">Done</button>
+        <button class="btn bp" onclick="closeModal()">Keep going →</button>
+      </div>
+    </div>`;
+}
+
+// ── EXERCISES ──────────────────────────────────────────────────────
+
+function breath(){
+  const total=120,phases=[
+    {n:'INHALE',dur:4,lbl:'Breathe in slowly…',sub:'Feel the air coming in'},
+    {n:'HOLD',dur:2,lbl:'Hold gently…',sub:'Pause at the top'},
+    {n:'EXHALE',dur:6,lbl:'Let it all go…',sub:'Longer than the inhale'},
+  ];
+  let elapsed=0,pi=0,pe=0;
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🌬️</div>
+      <div class="ex-title">Breath Awareness</div>
+      <div class="ex-desc">Follow the orb. Let thoughts pass like clouds.</div></div>
+    <div class="orb-wrap">
+      <div id="morb" class="morb"></div>
+      <div class="orb-phase" id="op">Starting…</div>
+      <div class="orb-sub" id="os"></div>
+    </div>
+    <div class="tbig" id="tb">${fmt(total)}</div><div class="tlbl">remaining</div>
+    <div class="steps" id="steps">
+      <div class="step"><div class="snum">1</div><div class="stxt">Notice cool air entering your nose</div></div>
+      <div class="step"><div class="snum">2</div><div class="stxt">Feel your chest or belly rise</div></div>
+      <div class="step"><div class="snum">3</div><div class="stxt">Exhale slowly — longer than the inhale</div></div>
+      <div class="step"><div class="snum">4</div><div class="stxt">Mind wandered? That's normal. Just return.</div></div>
+    </div>
+    <div class="btns"><button class="btn bs" onclick="closeModal()">Stop</button></div>`;
+  S.timer=setInterval(()=>{
+    elapsed++;pe++;
+    const p=phases[pi];
+    document.getElementById('tb').textContent=fmt(total-elapsed);
+    document.getElementById('op').textContent=p.lbl;
+    document.getElementById('os').textContent=`${pe}/${p.dur}s — ${p.sub}`;
+    document.getElementById('morb').className='morb '+p.n.toLowerCase();
+    document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('on',i===pi));
+    if(pe>=p.dur){pi=(pi+1)%phases.length;pe=0;}
+    if(elapsed>=total){clearInterval(S.timer);complete('breath',15);}
+  },1000);
+}
+
+function bodyscan(){
+  const zones=[
+    {name:'Head & Face',icon:'🧠',q:'Any tension in your jaw, forehead, temples? You probably hold more stress here than you realise.'},
+    {name:'Neck & Shoulders',icon:'🦴',q:'Are your shoulders creeping up? Let them drop. Feel the release.'},
+    {name:'Chest & Heart',icon:'💜',q:'How is your breathing? Shallow? Fast? Just notice — no need to change it.'},
+    {name:'Belly',icon:'🫁',q:'Tight or relaxed? Try breathing into your belly — feel it expand.'},
+    {name:'Arms & Hands',icon:'🤲',q:'Any tension? Clench your fists for 3 seconds, then release completely.'},
+    {name:'Legs & Feet',icon:'🦵',q:'Feel the ground beneath you. You are supported. You are here.'},
+  ];
+  let cur=0;
+  function render(){
+    const z=zones[cur];
+    document.getElementById('zi').textContent=z.icon;
+    document.getElementById('zn').textContent=z.name;
+    document.getElementById('zq').textContent=z.q;
+    document.getElementById('zp').textContent=`${cur+1} of ${zones.length}`;
+    document.getElementById('zbar').style.width=`${(cur+1)/zones.length*100}%`;
+    document.getElementById('znote').value='';
+    document.getElementById('znxt').textContent=cur===zones.length-1?'Finish ✓':'Next →';
+    const c=document.getElementById('zc'); c.style.transform='scale(.95)';
+    setTimeout(()=>c.style.transform='scale(1)',200);
+  }
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🧘</div>
+      <div class="ex-title">Body Scan</div>
+      <div class="ex-desc">Move awareness through each area. Don't fix — just notice.</div></div>
+    <div class="pbar-wrap"><div class="pbar" id="zbar"></div></div>
+    <div class="zcard" id="zc">
+      <div class="zicon" id="zi"></div><div class="zname" id="zn"></div>
+      <div class="zq" id="zq"></div><div class="zn" id="zp"></div>
+    </div>
+    <div class="jlbl">What do you notice? (optional)</div>
+    <textarea class="jtxt" id="znote" placeholder="e.g. tight jaw, warmth in chest, tingling…" style="min-height:60px"></textarea>
+    <div class="btns">
+      <button class="btn bs" onclick="closeModal()">Stop</button>
+      <button class="btn bp" id="znxt">Next →</button>
+    </div>`;
+  render();
+  document.getElementById('znxt').addEventListener('click',()=>{
+    cur++;if(cur>=zones.length){complete('bodyscan',15);return;}render();});
+}
+
+function thoughts(){
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">💭</div>
+      <div class="ex-title">Thought Catcher + CBT</div>
+      <div class="ex-desc">Write it → Name the distortion → Challenge it → Let go.</div></div>
+    <div class="ib" style="margin-bottom:13px">
+      <strong>Remember:</strong> You are not your thoughts. Writing them down creates distance — and distance creates freedom.
+    </div>
+    <div class="jlbl">1. What thought keeps showing up?</div>
+    <textarea class="jtxt" id="t1" placeholder="Write it uncensored. E.g. 'I always mess everything up' or 'I'm so far behind'" rows="3"></textarea>
+    <div class="jlbl" style="margin-top:12px">2. Which distortion is this?</div>
+    <div class="dpick" id="dpick"></div>
+    <div id="dresp"></div>
+    <div class="jlbl" style="margin-top:12px">3. Rewrite as a neutral, compassionate fact:</div>
+    <textarea class="jtxt" id="t3" placeholder="E.g. 'I'm having the thought that I always mess up. That's a distortion. The reality is…'" rows="3"></textarea>
+    <div class="ib teal" style="margin-top:9px">
+      <strong>Tolle + Burns:</strong> First observe it as just a thought. Then challenge whether it's true. Both moves together break the loop.
+    </div>
+    <div class="btns">
+      <button class="btn bs" onclick="closeModal()">Stop</button>
+      <button class="btn bp" onclick="complete('thoughts',15)">Release it ✓</button>
+    </div>`;
+  const pick=document.getElementById('dpick');
+  DISTS.forEach(d=>{
+    const el=document.createElement('div'); el.className='dp'; el.textContent=d.n;
+    el.addEventListener('click',()=>{
+      document.querySelectorAll('.dp').forEach(x=>x.classList.remove('on'));
+      el.classList.add('on');
+      document.getElementById('dresp').innerHTML=
+        `<div class="ib" style="animation:fup .3s ease"><strong>Challenge:</strong> ${d.r}</div>`;
+    });
+    pick.appendChild(el);
+  });
+}
+
+function acceptance(){
+  let step=0;
+  const steps=[
+    {icon:'😤',title:'What are you fighting right now?',
+     html:`<div class="jlbl">What situation are you resisting?</div>
+      <textarea class="jtxt" id="a1" placeholder="E.g. 'I can't focus', 'This is unfair', 'I'm overwhelmed'" rows="3"></textarea>`},
+    {icon:'🌊',title:'Typical vs. Radical thinking',
+     html:`<div class="ra-compare">
+        <div class="ra-box bad"><strong>Your typical thought</strong><span id="atyp">…</span></div>
+        <div class="ra-box good"><strong>Radical acceptance</strong><span id="arad">…</span></div>
+      </div>
+      <div class="ib">Accepting doesn't mean liking it. It means you stop adding <em>extra</em> suffering on top of what's already here. Then you can act clearly.</div>`},
+    {icon:'✅',title:'One tiny action right now',
+     html:`<div class="jlbl">Acceptance + action. What's the smallest possible next step?</div>
+      <textarea class="jtxt" id="a3" placeholder="E.g. 'Set a 5-min timer', 'Get a glass of water', 'Close one tab'" style="min-height:60px"></textarea>
+      <div class="chips" style="margin-top:9px">
+        <div class="chip" onclick="pa('Take 3 deep breaths')">3 deep breaths</div>
+        <div class="chip" onclick="pa('Set a 5-min timer')">5-min timer</div>
+        <div class="chip" onclick="pa('Close distracting tabs')">Close tabs</div>
+        <div class="chip" onclick="pa('Stand and stretch for 60s')">Stretch</div>
+        <div class="chip" onclick="pa('Drink a glass of water')">Water</div>
+      </div>`}
+  ];
+  function render(){
+    const s=steps[step];
+    document.getElementById('ai').textContent=s.icon;
+    document.getElementById('at').textContent=s.title;
+    document.getElementById('ab').innerHTML=s.html;
+    if(step===1){
+      const v=window._a1||'this situation';
+      document.getElementById('atyp').textContent=`"${v} — this isn't fair. This shouldn't be happening."`;
+      document.getElementById('arad').textContent=`"This is happening. I accept it's real. I don't have to like it — I just stop fighting it."`;
+    }
+    document.getElementById('abk').style.display=step===0?'none':'';
+    document.getElementById('an').textContent=step===steps.length-1?'Done ✓':'Next →';
+  }
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji" id="ai">🌊</div>
+      <div class="ex-title" id="at"></div></div>
+    <div id="ab"></div>
+    <div class="btns">
+      <button class="btn bs" id="abk">← Back</button>
+      <button class="btn bp" id="an">Next →</button>
+    </div>`;
+  render();
+  document.getElementById('an').addEventListener('click',()=>{
+    if(step===0)window._a1=document.getElementById('a1')?.value||'this situation';
+    step++;if(step>=steps.length){complete('acceptance',12);return;}render();
+  });
+  document.getElementById('abk').addEventListener('click',()=>{if(step>0){step--;render();}});
+}
+window.pa=v=>{const e=document.getElementById('a3');if(e)e.value=v;};
+
+function senses(){
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">👁️</div>
+      <div class="ex-title">5 Senses Grounding</div>
+      <div class="ex-desc">Your senses only operate in the present. They can't worry about tomorrow.</div></div>
+    <div class="ib teal"><strong>ADHD tip:</strong> This forces your brain onto real sensory data instead of mental stories — one of the fastest ways to break a spiral.</div>
+    <div style="margin-top:13px">
+      <div class="srow"><div class="sico">👀</div><div style="flex:1"><div class="slabel">See — 3 things</div><input class="jinput" placeholder="e.g. window, lamp, coffee cup…"></div></div>
+      <div class="srow"><div class="sico">👂</div><div style="flex:1"><div class="slabel">Hear — 2 sounds</div><input class="jinput" placeholder="e.g. fan, distant traffic, keyboard…"></div></div>
+      <div class="srow"><div class="sico">🤚</div><div style="flex:1"><div class="slabel">Feel — 1 sensation</div><input class="jinput" placeholder="e.g. chair beneath me, warmth in hands…"></div></div>
+      <div class="srow"><div class="sico">👃</div><div style="flex:1"><div class="slabel">Smell — anything?</div><input class="jinput" placeholder="e.g. coffee, fresh air, nothing…"></div></div>
+      <div class="srow"><div class="sico">👅</div><div style="flex:1"><div class="slabel">Taste — what's there?</div><input class="jinput" placeholder="e.g. water, minty, neutral…"></div></div>
+    </div>
+    <div class="btns">
+      <button class="btn bs" onclick="closeModal()">Stop</button>
+      <button class="btn bp" onclick="complete('senses',15)">I'm grounded ✓</button>
+    </div>`;
+}
+
+function ego(){
+  const EGO={
+    judge:"Judgment is the ego making itself feel superior. Ask: what do I not know about this person or situation?",
+    compare:"Comparison is ego measuring worth. But your worth is not a measurement — it's inherent. You are not what you achieve.",
+    shame:"Shame says 'I am bad.' The ego thrives on shame because it makes you small. You are not your past.",
+    drama:"Notice how the ego loves drama. Say: 'There is the ego, creating a story again.' Then let it pass.",
+    right:"The ego must win. But ask: is being right worth more than being at peace?",
+    fear:"Fear of failure lives in the future — which doesn't exist yet. Right now, what is actually threatening you?",
+  };
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🎭</div>
+      <div class="ex-title">Ego Observer</div>
+      <div class="ex-desc">Your ego is a character in your movie. You are the screen — not the character.</div></div>
+    <div class="ib"><strong>Key:</strong> If you can <em>observe</em> your ego, you are not your ego. The moment you notice the voice — you're already free from it.</div>
+    <div class="jlbl" style="margin-top:13px">What is your ego doing right now?</div>
+    <div class="chips">
+      <div class="chip" data-e="judge">⚖️ Judging</div>
+      <div class="chip" data-e="compare">📊 Comparing</div>
+      <div class="chip" data-e="shame">😔 Shame spiral</div>
+      <div class="chip" data-e="drama">🎭 Creating drama</div>
+      <div class="chip" data-e="right">💪 Needing to be right</div>
+      <div class="chip" data-e="fear">😰 Fear of failing</div>
+    </div>
+    <div id="eresp" style="min-height:50px"></div>
+    <div class="jlbl">Write what you observe as a neutral witness:</div>
+    <textarea class="jtxt" id="enote" placeholder="E.g. 'My ego is comparing me to others. I notice this. It's a story, not reality. I return to now.'" rows="3"></textarea>
+    <div class="btns">
+      <button class="btn bs" onclick="closeModal()">Stop</button>
+      <button class="btn bp" onclick="complete('ego',15)">I see it clearly ✓</button>
+    </div>`;
+  document.querySelectorAll('.chip[data-e]').forEach(c=>c.addEventListener('click',()=>{
+    document.querySelectorAll('.chip[data-e]').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    document.getElementById('eresp').innerHTML=
+      `<div class="ib" style="animation:fup .3s ease"><strong>Tolle says:</strong> ${EGO[c.dataset.e]}</div>`;
+  }));
+}
+
+// ── NEW: ACCEPTS TOOLKIT ────────────────────────────────────────────
+function accepts(){
+  const letters=[
+    {l:'A',w:'Activities',desc:'Engage in something that requires thought and concentration.',
+     opts:['Do a puzzle or game','Tidy one small area','Work on a project or hobby','Watch something engaging']},
+    {l:'C',w:'Contributing',desc:'Focus on someone or something other than yourself.',
+     opts:['Text someone you care about','Leave a kind message or review','Help a colleague with something','Feed or pet an animal']},
+    {l:'C',w:'Comparisons',desc:'Remember a time things were harder than they are right now.',
+     opts:['Think of a harder time you survived','Remember someone going through more','Reflect on progress since last year','Count 3 things that are okay right now']},
+    {l:'E',w:'Emotions',desc:'Create a competing emotion to shift your state.',
+     opts:['Watch something funny on YouTube','Put on your favourite upbeat song','Look at photos that make you happy','Play a game that makes you laugh']},
+    {l:'P',w:'Pushing Away',desc:'Put the problem aside — just for now — until a better time.',
+     opts:['Write it on paper and fold it away','Imagine placing it in a box on a shelf','Tell yourself "I\'ll return to this in 30 min"','Write it in a "worry journal" for later']},
+    {l:'T',w:'Thoughts',desc:'Redirect your thinking when emotions take over.',
+     opts:['Count backwards from 100 by 7s','List every country you know','Recite song lyrics in your head','Read one page of anything']},
+    {l:'S',w:'Sensations',desc:'Use safe physical sensations to shift your nervous system.',
+     opts:['Hold ice cubes for 30 seconds','Run cold water over your wrists','Eat something very sour','Do 10 jumping jacks right now']},
+  ];
+  let cur=0;
+  function render(){
+    const l=letters[cur];
+    document.getElementById('al').textContent=l.l;
+    document.getElementById('aw').textContent=l.w;
+    document.getElementById('ad').textContent=l.desc;
+    document.getElementById('apct').style.width=`${(cur+1)/letters.length*100}%`;
+    document.getElementById('apn').textContent=`${cur+1}/7`;
+    const opts=document.getElementById('aopts');
+    opts.innerHTML=l.opts.map((o,i)=>`<button class="as-opt" onclick="pickOpt(this)">${o}</button>`).join('');
+    document.getElementById('askp').textContent=cur===letters.length-1?'Done ✓':'Skip →';
+    document.getElementById('anxt2').textContent=cur===letters.length-1?'Finish ✓':'Pick one & next →';
+  }
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🎯</div>
+      <div class="ex-title">ACCEPTS Toolkit</div>
+      <div class="ex-desc">DBT distress survival. Ride the wave until it passes — without making it worse.</div></div>
+    <div class="ib orange"><strong>Remember:</strong> Distress always passes. The goal right now is to survive without doing anything that makes things worse.</div>
+    <div class="pbar-wrap" style="margin-top:12px"><div class="pbar" id="apct"></div></div>
+    <div class="accepts-step">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:3px">
+        <div class="as-letter" id="al"></div>
+        <div class="as-word" id="aw"></div>
+        <div style="margin-left:auto;font-size:.72rem;color:var(--muted)" id="apn"></div>
+      </div>
+      <div class="as-desc" id="ad"></div>
+      <div class="as-opts" id="aopts"></div>
+      <div class="jlbl" style="margin-top:10px">Or write your own:</div>
+      <input class="jinput" id="acustom" placeholder="What will you do right now?">
+    </div>
+    <div class="btns">
+      <button class="btn bs" id="askp">Skip →</button>
+      <button class="btn bt" id="anxt2">Pick one & next →</button>
+    </div>`;
+  render();
+  window.pickOpt=el=>{
+    document.querySelectorAll('.as-opt').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById('acustom').value=el.textContent;
+  };
+  document.getElementById('anxt2').addEventListener('click',()=>{
+    cur++;if(cur>=letters.length){complete('accepts',20);return;}render();});
+  document.getElementById('askp').addEventListener('click',()=>{
+    cur++;if(cur>=letters.length){complete('accepts',20);return;}render();});
+}
+
+// ── NEW: SELF-SOOTHE ───────────────────────────────────────────────
+function selfsoothe(){
+  const senses2=[
+    {ico:'👀',name:'Vision',ideas:['Go for a walk and notice the sights','Watch a nature video','Look at photos you love','Sit near a window and observe']},
+    {ico:'👂',name:'Hearing',ideas:['Play your favourite music right now','Listen to rain or nature sounds','Put on a podcast that makes you smile','Play a soothing lo-fi playlist']},
+    {ico:'🤚',name:'Touch',ideas:['Take a warm shower or bath','Hold a warm cup of tea or coffee','Use a weighted blanket','Pet something soft — a pet, a blanket']},
+    {ico:'👅',name:'Taste',ideas:['Make yourself a warm drink','Have a small treat you enjoy','Chew gum or eat something with strong flavour','Drink a cold glass of water slowly']},
+    {ico:'👃',name:'Smell',ideas:['Light a candle or incense','Step outside for fresh air','Spray a scent you like','Smell something from your kitchen']},
+  ];
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🌸</div>
+      <div class="ex-title">Self-Soothe with Senses</div>
+      <div class="ex-desc">Pick a sense to focus on. Do it for at least 2 minutes. No phone. Just this.</div></div>
+    <div class="ib teal"><strong>DBT principle:</strong> Positive sensory input directly calms the nervous system — no thinking required. This works even when nothing else does.</div>
+    <div class="soothe-grid" id="sgrid"></div>
+    <div id="sdetail"></div>
+    <div class="btns">
+      <button class="btn bs" onclick="closeModal()">Stop</button>
+      <button class="btn bp" onclick="complete('selfsoothe',10)">Done ✓</button>
+    </div>`;
+  const grid=document.getElementById('sgrid');
+  senses2.forEach((s,i)=>{
+    const el=document.createElement('div'); el.className='soothe-btn';
+    el.innerHTML=`<div class="soothe-ico">${s.ico}</div><div class="soothe-lbl">${s.name}</div>`;
+    el.addEventListener('click',()=>{
+      document.querySelectorAll('.soothe-btn').forEach(x=>x.classList.remove('on'));
+      el.classList.add('on');
+      const d=document.getElementById('sdetail');
+      d.className='soothe-detail on';
+      d.innerHTML=`<div class="ib teal"><strong>${s.ico} ${s.name} — try one of these:</strong><br><br>`+
+        s.ideas.map(id=>`• ${id}`).join('<br>')+`</div>`;
+    });
+    grid.appendChild(el);
+  });
+}
+
+// ── NEW: SAFETY BEHAVIORS CHECK ────────────────────────────────────
+function safetybehaviors(){
+  const behaviors=[
+    'Speak very little','Speak very softly','Avoid eye contact',
+    'Stand far from others','Avoid sharing anything personal',
+    'Constantly check appearance','Obsess over looks before socialising',
+    'Find reasons to leave events early','Avoid eating in front of others',
+    'Avoid asking questions','Rehearse what to say excessively',
+    'Use phone/distractions to look busy','Talk excessively to avoid silences',
+    'Lie or exaggerate to look better','Seek reassurance constantly',
+    'Cave to peer pressure','Over-explain or over-apologise',
+    'Mask (copy neurotypical behaviour)','Interrupt to keep control',
+    'Avoid initiating contact first',
+  ];
+  let step=0;
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🛡️</div>
+      <div class="ex-title">Safety Behaviors Check</div>
+      <div class="ex-desc">Identify patterns that feel helpful but actually maintain anxiety.</div></div>
+    <div id="sbstep"></div>`;
+
+  function renderStep(){
+    const el=document.getElementById('sbstep');
+    if(step===0){
+      el.innerHTML=`
+        <div class="ib red"><strong>The cycle:</strong><br>
+          Anxiety → Safety Behavior → Temporary Relief → <em>Anxiety grows stronger next time</em>
+        </div>
+        <div class="ib orange" style="margin-top:4px"><strong>ADHD + RSD note:</strong> Rejection Sensitive Dysphoria makes this cycle intense. Masking, people-pleasing, and over-explaining are all safety behaviors driven by fear of being rejected or judged.</div>
+        <div class="btns" style="margin-top:16px">
+          <button class="btn bs" onclick="closeModal()">Close</button>
+          <button class="btn bp" onclick="sbNext()">See the behaviors →</button>
+        </div>`;
+    } else if(step===1){
+      el.innerHTML=`
+        <div class="jlbl" style="margin-bottom:10px">Tap every behavior you recognise in yourself:</div>
+        <div style="display:flex;flex-wrap:wrap" id="sbchips">
+          ${behaviors.map(b=>`<span class="sb-chip" onclick="this.classList.toggle('on')">${b}</span>`).join('')}
+        </div>
+        <div class="ib" style="margin-top:12px" id="sbcount">0 selected</div>
+        <div class="btns" style="margin-top:12px">
+          <button class="btn bs" onclick="sbBack()">← Back</button>
+          <button class="btn bp" onclick="sbNext()">Next →</button>
+        </div>`;
+      document.querySelectorAll('.sb-chip').forEach(c=>{
+        c.addEventListener('click',()=>{
+          const n=document.querySelectorAll('.sb-chip.on').length;
+          document.getElementById('sbcount').innerHTML=
+            n===0?'0 selected — you may not notice them yet':
+            n<=3?`${n} selected — good awareness`:
+            `${n} selected — that's a lot to carry. You're not alone.`;
+        });
+      });
+    } else if(step===2){
+      const selected=[...document.querySelectorAll('.sb-chip.on')].map(c=>c.textContent);
+      window._sbSelected=selected;
+      el.innerHTML=`
+        <div class="ib green"><strong>Awareness is the first step.</strong> These behaviors feel protective — but each time you use them, anxiety gets confirmed as something to avoid, not face.</div>
+        <div class="jlbl" style="margin-top:13px">Pick ONE behavior to gently challenge this week:</div>
+        <div class="chips" id="sbpick">
+          ${selected.length?selected.map(s=>`<div class="chip" onclick="pickSb(this)">${s}</div>`).join(''):
+            '<div class="chip on">Avoid eye contact</div>'}
+        </div>
+        <div id="sbchal"></div>
+        <div class="jlbl" style="margin-top:12px">What will you try instead?</div>
+        <textarea class="jtxt" id="sbreplace" placeholder="E.g. 'I will make brief eye contact during one conversation this week'" style="min-height:65px"></textarea>
+        <div class="btns" style="margin-top:12px">
+          <button class="btn bs" onclick="sbBack()">← Back</button>
+          <button class="btn bp" onclick="complete('safetybehaviors',15)">Commit to it ✓</button>
+        </div>`;
+    }
+  }
+  window.sbNext=()=>{step++;renderStep();};
+  window.sbBack=()=>{step--;renderStep();};
+  window.pickSb=el=>{
+    document.querySelectorAll('#sbpick .chip').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById('sbchal').innerHTML=
+      `<div class="ib orange" style="animation:fup .3s ease"><strong>Challenge:</strong> Instead of "${el.textContent}", try doing the opposite in one small, safe situation. Exposure — even 10% more — gradually shrinks the anxiety.</div>`;
+  };
+  renderStep();
+}
+
+// ── NEW: EMOTIONAL FIRST AID ───────────────────────────────────────
+function selfsoothe2(){
+  const steps2=[
+    {icon:'🌊',title:'Name the wave',
+     body:`<div class="jlbl">What emotion is flooding you right now?</div>
+      <div class="chips">
+        <div class="chip" data-f="overwhelmed">😵‍💫 Overwhelmed</div>
+        <div class="chip" data-f="angry">😡 Angry</div>
+        <div class="chip" data-f="anxious">😰 Anxious</div>
+        <div class="chip" data-f="sad">😢 Sad</div>
+        <div class="chip" data-f="shame">😔 Shame</div>
+        <div class="chip" data-f="numb">😶 Numb</div>
+      </div>
+      <div id="fresponse"></div>`},
+    {icon:'🫁',title:'Regulate first',
+     body:`<div class="ib"><strong>Before thinking, before deciding:</strong> Your brain cannot process information well while flooded. Do this first.</div>
+      <div style="background:var(--bg);border-radius:12px;padding:14px;text-align:center;margin:12px 0">
+        <div style="font-size:1.5rem;font-weight:800;color:var(--teal)">Physiological Sigh</div>
+        <div style="font-size:.83rem;color:var(--muted);margin-top:6px;line-height:1.5">Double inhale through the nose (fill lungs completely)<br>then one long, slow exhale through the mouth.<br><br>Do this <strong>3 times</strong>. This is the fastest way to calm your nervous system.</div>
+      </div>`},
+    {icon:'🧠',title:'Radical acceptance check',
+     body:`<div class="jlbl">What is happening that you're fighting against?</div>
+      <textarea class="jtxt" id="fa3" placeholder="E.g. 'I got criticism I didn't expect', 'Plans changed', 'I made a mistake'" rows="2"></textarea>
+      <div class="ib" style="margin-top:10px"><strong>Say this:</strong> <em style="color:var(--p)">"This is happening. I don't have to like it. I accept it is real. Now — what's my next smallest action?"</em></div>`},
+    {icon:'🎯',title:'One safe action',
+     body:`<div class="jlbl">What's one safe, small action you can take right now?</div>
+      <div class="chips">
+        <div class="chip" onclick="pfa('Step away for 5 minutes')">5-min step away</div>
+        <div class="chip" onclick="pfa('Drink a glass of water')">Drink water</div>
+        <div class="chip" onclick="pfa('Text a trusted person')">Text someone safe</div>
+        <div class="chip" onclick="pfa('Write my feelings down')">Write it out</div>
+        <div class="chip" onclick="pfa('Take 10 deep breaths')">10 deep breaths</div>
+        <div class="chip" onclick="pfa('Do nothing — just sit with it')">Just sit with it</div>
+      </div>
+      <textarea class="jtxt" id="fa4" style="margin-top:10px;min-height:55px" placeholder="My one action right now is…"></textarea>`},
+    {icon:'💜',title:'Self-compassion close',
+     body:`<div style="background:linear-gradient(135deg,#f3eeff,#ffe8f7);border-radius:14px;padding:18px;text-align:center">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--p);line-height:1.7">
+          "Having ADHD doesn't mean<br>you're broken.<br>It means your brain works differently.<br>You are doing your best.<br>That is enough."
+        </div>
+      </div>
+      <div class="ib green" style="margin-top:12px"><strong>Remember:</strong> Emotional flooding in ADHD is neurological, not a character flaw. Every time you regulate, you're literally strengthening the circuits that help you do it faster next time.</div>`},
+  ];
+  let step=0;
+  function render(){
+    const s=steps2[step];
+    document.getElementById('efai').textContent=s.icon;
+    document.getElementById('efat').textContent=s.title;
+    document.getElementById('efab').innerHTML=s.body;
+    document.getElementById('efabk').style.display=step===0?'none':'';
+    document.getElementById('efan').textContent=step===steps2.length-1?'Done ✓':'Next →';
+    if(step===0){
+      document.querySelectorAll('[data-f]').forEach(c=>c.addEventListener('click',()=>{
+        document.querySelectorAll('[data-f]').forEach(x=>x.classList.remove('on'));
+        c.classList.add('on');
+        const fmap={
+          overwhelmed:"Your ADHD nervous system is flooded. This is physical. Regulate first — then respond.",
+          angry:"Anger is often a signal something feels unjust. It's valid. Let's process it safely.",
+          anxious:"Anxiety in ADHD is often RSD — fear of rejection or failure. It's not a prediction.",
+          sad:"Sadness deserves space. Don't push it away. Let it move through you.",
+          shame:"Shame is the ego saying you're fundamentally wrong. You're not. You're human.",
+          numb:"Numbness is a protection. Your brain is taking a break. That's okay.",
+        };
+        document.getElementById('fresponse').innerHTML=
+          `<div class="ib" style="animation:fup .3s ease"><strong>Note:</strong> ${fmap[c.dataset.f]}</div>`;
+      }));
+    }
+  }
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji" id="efai">💆</div>
+      <div class="ex-title" id="efat"></div>
+      <div class="ex-desc">5 steps. Do them in order. Don't skip ahead.</div></div>
+    <div class="pbar-wrap"><div class="pbar" id="efapbar"></div></div>
+    <div id="efab"></div>
+    <div class="btns">
+      <button class="btn bs" id="efabk">← Back</button>
+      <button class="btn bp" id="efan">Next →</button>
+    </div>`;
+  render();
+  document.getElementById('efapbar').style.width=`${1/steps2.length*100}%`;
+  document.getElementById('efan').addEventListener('click',()=>{
+    step++;
+    if(step>=steps2.length){complete('selfsoothe2',20);return;}
+    document.getElementById('efapbar').style.width=`${(step+1)/steps2.length*100}%`;
+    render();
+  });
+  document.getElementById('efabk').addEventListener('click',()=>{
+    if(step>0){step--;document.getElementById('efapbar').style.width=`${(step+1)/steps2.length*100}%`;render();}
+  });
+}
+window.pfa=v=>{const e=document.getElementById('fa4');if(e)e.value=v;};
+
+// ── MINDFUL ACTIVITY ───────────────────────────────────────────────
+function mindfulactivity(){
+  const activities=[
+    {label:'🚶 Walk',id:'walk',senses:[
+      {ico:'👀',name:'Vision',prompt:'What do you see right now? Notice colours, shapes, shadows, movement. Try to spot something you\'ve never noticed before.'},
+      {ico:'👂',name:'Hearing',prompt:'Close your eyes for 5 seconds. What sounds reach you? Near ones, distant ones, anything unexpected?'},
+      {ico:'🤚',name:'Touch',prompt:'Feel your feet meeting the ground with each step. Notice the air temperature on your skin. Is there a breeze?'},
+      {ico:'👅',name:'Taste',prompt:'What taste is in your mouth right now? Even the absence of taste is data.'},
+      {ico:'👃',name:'Smell',prompt:'Breathe in through your nose. What scents are present? Grass? Exhaust? Fresh air? Something cooking?'},
+    ]},
+    {label:'☕ Eating/Drinking',id:'eat',senses:[
+      {ico:'👀',name:'Vision',prompt:'Look at your food or drink as if for the first time. What colours and textures do you see?'},
+      {ico:'👂',name:'Hearing',prompt:'Does your food make a sound? Sizzle, crunch, bubbles in a drink? Listen for it.'},
+      {ico:'🤚',name:'Touch',prompt:'What is the temperature? The texture in your mouth? The weight of the cup or utensil?'},
+      {ico:'👅',name:'Taste',prompt:'Hold the food or sip in your mouth for 3 seconds. What flavours emerge? Sweet, bitter, salty, sour, umami?'},
+      {ico:'👃',name:'Smell',prompt:'Smell it before you eat. Aroma is 80% of taste. What do you notice that you usually miss?'},
+    ]},
+    {label:'🧹 Chores',id:'chores',senses:[
+      {ico:'👀',name:'Vision',prompt:'Watch the surface change as you clean or tidy. Notice the before and after — even in a small area.'},
+      {ico:'👂',name:'Hearing',prompt:'Notice the sounds of the task — water, brushing, rustling. Let those sounds anchor you here.'},
+      {ico:'🤚',name:'Touch',prompt:'Feel the tool in your hands. Notice the pressure, friction, resistance, temperature.'},
+      {ico:'👅',name:'Taste',prompt:'Any taste in the air? Cleaning products, fresh laundry, something you\'re cooking? Just notice.'},
+      {ico:'👃',name:'Smell',prompt:'What smells are present? Fresh, clean, dusty? Familiar home scents you usually filter out?'},
+    ]},
+    {label:'🚿 Shower',id:'shower',senses:[
+      {ico:'👀',name:'Vision',prompt:'Watch the water falling. Notice the steam, the light through it, the way it moves.'},
+      {ico:'👂',name:'Hearing',prompt:'Listen to the sound of the water. The rhythm of it. Let it fill your whole attention.'},
+      {ico:'🤚',name:'Touch',prompt:'Feel the temperature of the water on each part of your body as you move. Warm? Hot? Perfect?'},
+      {ico:'👅',name:'Taste',prompt:'Any scent strong enough to almost taste? Shampoo, soap, steam? Notice it.'},
+      {ico:'👃',name:'Smell',prompt:'What soaps, shampoos, or steam scents are present? Breathe them in deliberately.'},
+    ]},
+    {label:'🚗 Commute',id:'commute',senses:[
+      {ico:'👀',name:'Vision',prompt:'Look at what\'s around you as if you\'re a tourist seeing it for the first time. What stands out?'},
+      {ico:'👂',name:'Hearing',prompt:'Without looking, identify 3 distinct sounds. Close your eyes briefly if safe.'},
+      {ico:'🤚',name:'Touch',prompt:'Feel the seat under you. The steering wheel or rail in your hand. Your feet on the floor.'},
+      {ico:'👅',name:'Taste',prompt:'Any taste present? Coffee, gum, the morning air? Notice it without judgment.'},
+      {ico:'👃',name:'Smell',prompt:'What does your commute smell like today? Fresh air, city, transport, coffee from someone nearby?'},
+    ]},
+  ];
+
+  let chosen=null, senseIdx=0;
+
+  function renderPick(){
+    document.getElementById('maBody').innerHTML=`
+      <div class="jlbl">Pick any activity you\'re about to do (or just did):</div>
+      <div class="chips" style="margin-top:8px">
+        ${activities.map(a=>`<div class="chip" data-act="${a.id}">${a.label}</div>`).join('')}
+      </div>
+      <div class="ib teal" style="margin-top:12px">
+        <strong>How it works:</strong> You\'ll bring your full attention to each sense, one at a time. No need to force anything — just notice. The mind will wander. That\'s normal. Just return.
+      </div>
+      <div class="ib" style="margin-top:8px"><strong>ADHD tip:</strong> Mindful activities work better than seated meditation for many ADHD brains — you\'re already moving, so your body gets what it needs.</div>
+      <div class="btns" style="margin-top:16px">
+        <button class="btn bs" onclick="closeModal()">Cancel</button>
+        <button class="btn bt" id="maStart" disabled>Start →</button>
+      </div>`;
+    document.querySelectorAll('[data-act]').forEach(c=>c.addEventListener('click',()=>{
+      document.querySelectorAll('[data-act]').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on');
+      chosen=activities.find(a=>a.id===c.dataset.act);
+      document.getElementById('maStart').disabled=false;
+    }));
+    document.getElementById('maStart').addEventListener('click',()=>{
+      senseIdx=0; renderSense();
+    });
+  }
+
+  function renderSense(){
+    const s=chosen.senses[senseIdx];
+    const pct=((senseIdx+1)/chosen.senses.length*100).toFixed(0);
+    document.getElementById('maBody').innerHTML=`
+      <div class="pbar-wrap"><div class="pbar" style="width:${pct}%"></div></div>
+      <div style="text-align:center;margin:16px 0 12px">
+        <div style="font-size:2.4rem">${s.ico}</div>
+        <div style="font-size:1.15rem;font-weight:800;color:var(--teal);margin-top:6px">${s.name}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:3px">${senseIdx+1} of ${chosen.senses.length}</div>
+      </div>
+      <div class="ib teal" style="font-size:.86rem;line-height:1.65"><strong>Notice:</strong> ${s.prompt}</div>
+      <div class="jlbl" style="margin-top:14px">What do you actually notice right now?</div>
+      <textarea class="jtxt" id="maNote" placeholder="Write whatever comes — even 'nothing' is valid…" style="min-height:68px"></textarea>
+      <div class="btns" style="margin-top:14px">
+        <button class="btn bs" onclick="mindfulactivity()">↩ Restart</button>
+        <button class="btn bt" id="maNext">${senseIdx===chosen.senses.length-1?'Finish ✓':'Next sense →'}</button>
+      </div>`;
+    document.getElementById('maNext').addEventListener('click',()=>{
+      senseIdx++;
+      if(senseIdx>=chosen.senses.length){complete('mindfulactivity',15);return;}
+      renderSense();
+    });
+  }
+
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🚶</div>
+      <div class="ex-title">Mindful Activity</div>
+      <div class="ex-desc">Presence through your senses. Anywhere. Any time.</div></div>
+    <div id="maBody"></div>`;
+  renderPick();
+}
+
+// ── MINDFUL MEDITATION ─────────────────────────────────────────────
+function mindfulmeditation(){
+  const DURATION=600; // 10 min default
+  const steps=[
+    {n:1,icon:'🪑',title:'Find your seat',
+     text:'Find a place free of too much noise or distraction. Sit on a cushion, the floor, or in a chair. Sit up straight enough for easy breathing — but not so rigid you\'re uncomfortable. Let your hands rest naturally.'},
+    {n:2,icon:'🌬️',title:'Focus on breathing',
+     text:'Turn your focus toward your breathing. Notice the feeling of air entering your nose, travelling down to your lungs. Feel your chest or belly expand. As breath exits, notice how your body settles. Continue following the breath.'},
+    {n:3,icon:'🌊',title:'Stay with the breath',
+     text:'Keep returning to the physical sensation of breathing. Not the idea of breathing — the actual feeling. The coolness on inhale. The warmth on exhale. The pause between. Just this.'},
+    {n:4,icon:'🔭',title:'Notice thoughts as an observer',
+     text:'Your mind will wander — this is normal and expected. When you notice a thought, don\'t judge it. Simply acknowledge: "I\'m having a thought." For feelings — sadness, worry, happiness — notice where you feel it in your body. Say: "I am feeling this." Then return to your breath.'},
+    {n:5,icon:'🌀',title:'Return, again and again',
+     text:'Each time you notice you\'ve wandered — that moment of noticing IS the practice. You haven\'t failed. You\'ve succeeded. Return to your breath without criticism. Every return strengthens the muscle.'},
+    {n:6,icon:'💜',title:'Close gently',
+     text:'Slowly bring your attention back to the room. Notice sounds around you. Feel your body in the seat. Take one deep breath. Open your eyes. You have just trained your attention — one of the most powerful things an ADHD brain can do.'},
+  ];
+
+  let stepIdx=0, elapsed=0, stepStart=0;
+  const stepDurations=[60,120,180,60,120,60]; // seconds per step
+  const totalDur=stepDurations.reduce((a,b)=>a+b,0);
+
+  function render(){
+    const s=steps[stepIdx];
+    const pct=((elapsed/totalDur)*100).toFixed(1);
+    document.getElementById('mmStep').className='zcard';
+    document.getElementById('mmIco').textContent=s.icon;
+    document.getElementById('mmTitle').textContent=s.title;
+    document.getElementById('mmText').textContent=s.text;
+    document.getElementById('mmNum').textContent=`Step ${s.n} of ${steps.length}`;
+    document.getElementById('mmPbar').style.width=pct+'%';
+    document.getElementById('mmNext').textContent=stepIdx===steps.length-1?'Finish ✓':'Next step →';
+    setTimeout(()=>{document.getElementById('mmStep').style.transform='scale(1)';},50);
+  }
+
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🪷</div>
+      <div class="ex-title">Mindful Meditation</div>
+      <div class="ex-desc">Observe. Return. Repeat. That\'s the whole practice.</div></div>
+    <div class="ib"><strong>ADHD note:</strong> Your mind <em>will</em> wander — more than others. That\'s not failure. Every time you notice and return, you\'re building the attention muscle. Start with 5–10 minutes.</div>
+    <div class="pbar-wrap" style="margin:14px 0 10px"><div class="pbar" id="mmPbar" style="width:0%"></div></div>
+    <div class="zcard" id="mmStep" style="transition:transform .25s">
+      <div class="zicon" id="mmIco"></div>
+      <div class="zname" id="mmTitle"></div>
+      <div class="zq" id="mmText"></div>
+      <div class="zn" id="mmNum"></div>
+    </div>
+    <div class="ib teal" style="margin-top:10px;font-size:.8rem">
+      <strong>When a thought appears:</strong> Don\'t fight it. Just label it: <em>"Thinking."</em> Then gently return to your breath. No self-criticism — just return.
+    </div>
+    <div id="mmNote" style="margin-top:12px">
+      <div class="jlbl">Any thought or feeling you want to note? (optional)</div>
+      <textarea class="jtxt" id="mmJournal" placeholder="e.g. \'mind kept going to work\', \'noticed tightness in chest\', \'felt calm after 2 min\'…" style="min-height:62px"></textarea>
+    </div>
+    <div class="btns" style="margin-top:14px">
+      <button class="btn bs" onclick="closeModal()">Stop</button>
+      <button class="btn bp" id="mmNext">Next step →</button>
+    </div>`;
+
+  render();
+  S.timer=setInterval(()=>{
+    elapsed++;
+    const pct=((elapsed/totalDur)*100).toFixed(1);
+    if(document.getElementById('mmPbar'))
+      document.getElementById('mmPbar').style.width=pct+'%';
+    // Auto-advance step when time for it
+    if(elapsed-stepStart>=stepDurations[stepIdx] && stepIdx<steps.length-1){
+      stepIdx++; stepStart=elapsed; render();
+    }
+    if(elapsed>=totalDur){clearInterval(S.timer);complete('mindfulmeditation',20);}
+  },1000);
+
+  document.getElementById('mmNext').addEventListener('click',()=>{
+    stepStart=elapsed;
+    stepIdx++;
+    if(stepIdx>=steps.length){complete('mindfulmeditation',20);return;}
+    render();
+  });
+}
+
+// ── RESCUE ─────────────────────────────────────────────────────────
+function rescue(){
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🆘</div>
+      <div class="ex-title">60-Second Reset</div>
+      <div class="ex-desc">When it's all too much. Pick one. Just one.</div></div>
+    <div class="ib orange"><strong>Say this first:</strong><br>
+      <em style="color:var(--orange);font-size:.9rem">"I am here. I am safe. This moment is enough."</em></div>
+    <div style="margin-top:13px">
+      <div class="ropt" onclick="openEx('breath')"><div class="ropt-ico">🌬️</div><div class="ropt-info"><strong>Breath Reset</strong><span>Inhale 4 · hold 2 · exhale 6 — activates calm</span></div></div>
+      <div class="ropt" onclick="openEx('senses')"><div class="ropt-ico">👁️</div><div class="ropt-info"><strong>5 Senses Snap</strong><span>Name what's real around you right now</span></div></div>
+      <div class="ropt" onclick="openEx('accepts')"><div class="ropt-ico">🎯</div><div class="ropt-info"><strong>ACCEPTS Toolkit</strong><span>DBT distraction — ride the wave safely</span></div></div>
+      <div class="ropt" onclick="openEx('selfsoothe')"><div class="ropt-ico">🌸</div><div class="ropt-info"><strong>Self-Soothe</strong><span>Calm your nervous system through your senses</span></div></div>
+      <div class="ropt" onclick="openEx('selfsoothe2')"><div class="ropt-ico">💆</div><div class="ropt-info"><strong>Emotional First Aid</strong><span>5-step plan for emotional flooding</span></div></div>
+    </div>
+    <div class="btns"><button class="btn bs" onclick="closeModal()">Close</button></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TASKS & GOALS ENGINE
+// ══════════════════════════════════════════════════════════════════
+
+const WEEK_KEY  = 'nw_week_of';
+const MONTH_KEY = 'nw_month_of';
+const nowWeek  = ()=>{ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-d.getDay()); return d.toDateString(); };
+const nowMonth = ()=>{ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()}`; };
+
+// ── Task data helpers ──────────────────────────────────────────────
+function loadTasks(){ return JSON.parse(localStorage.getItem('nw_tasks_daily')||'[]'); }
+function saveTasks(t){ localStorage.setItem('nw_tasks_daily',JSON.stringify(t)); }
+function loadWeekly(){ return JSON.parse(localStorage.getItem('nw_tasks_weekly')||'[]'); }
+function saveWeekly(t){ localStorage.setItem('nw_tasks_weekly',JSON.stringify(t)); }
+function loadMonthly(){ return JSON.parse(localStorage.getItem('nw_tasks_monthly')||'[]'); }
+function saveMonthly(t){ localStorage.setItem('nw_tasks_monthly',JSON.stringify(t)); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+// ── Carry-forward: tasks from previous days that weren't done ──────
+function checkCarryForward(){
+  const tasks = loadTasks();
+  const changed = tasks.map(t=>{
+    if(!t.done && t.date && t.date!==TODAY && !t.carried){
+      return {...t, carried:true, date:TODAY};
+    }
+    if(t.date && t.date!==TODAY && t.done) return null; // remove old done tasks
+    return t;
+  }).filter(Boolean);
+  saveTasks(changed);
+}
+
+// ── Render today panel ─────────────────────────────────────────────
+function renderToday(){
+  checkCarryForward();
+  const tasks = loadTasks().filter(t=>t.date===TODAY||!t.date);
+  const todo  = tasks.filter(t=>!t.done);
+  const done  = tasks.filter(t=>t.done);
+  const mit   = tasks.find(t=>t.mit && !t.done);
+  const total = tasks.length;
+  const doneCt= done.length;
+
+  // progress bar
+  const pct = total ? Math.round(doneCt/total*100) : 0;
+  document.getElementById('dayFill').style.width = pct+'%';
+  document.getElementById('dayTxt').textContent  = `${doneCt} of ${total} done`;
+  document.getElementById('dayPct').textContent  = pct+'%';
+
+  // MIT card
+  const mitBody = document.getElementById('mitBody');
+  if(mit){
+    mitBody.innerHTML=`
+      <div class="mit-text">${esc(mit.text)}</div>
+      <div class="mit-actions">
+        <button class="mit-btn" onclick="startFocusTimer('${mit.id}')">⏱ 25-min focus</button>
+        <button class="mit-btn" onclick="toggleDone('${mit.id}')">✓ Done!</button>
+      </div>`;
+  } else if(todo.length){
+    mitBody.innerHTML=`<div class="mit-empty">Tap ★ on any task to set it as your #1 focus.</div>`;
+  } else if(doneCt===total && total>0){
+    mitBody.innerHTML=`<div class="mit-empty">🎉 All tasks done! You crushed it.</div>`;
+  } else {
+    mitBody.innerHTML=`<div class="mit-empty">No task set as your #1 focus yet.<br>Add a task below, then ★ it.</div>`;
+  }
+
+  // todo list
+  const todoEl = document.getElementById('todoList');
+  document.getElementById('todoCount').textContent = todo.length;
+  if(todo.length===0){
+    todoEl.innerHTML=`<div class="empty-state"><div class="empty-ico">✨</div><div class="empty-msg">${doneCt>0?'All tasks complete — amazing!':'Nothing added yet. What do you need to do today?'}</div></div>`;
+  } else {
+    todoEl.innerHTML='';
+    todo.forEach(t=>todoEl.appendChild(makeTaskEl(t)));
+  }
+
+  // done list
+  const doneEl  = document.getElementById('doneList');
+  const doneSec = document.getElementById('doneSection');
+  document.getElementById('doneCount').textContent = doneCt;
+  if(doneCt>0){
+    doneSec.style.display='';
+    doneEl.innerHTML='';
+    done.forEach(t=>doneEl.appendChild(makeTaskEl(t)));
+  } else {
+    doneSec.style.display='none';
+  }
+}
+
+function makeTaskEl(t){
+  const el=document.createElement('div');
+  el.className='task-item'+(t.done?' done-item':'')+(t.mit&&!t.done?' mit':'');
+  el.dataset.id=t.id;
+  const tags=[];
+  if(t.quick) tags.push('<span class="ttag quick">⚡ 2 min</span>');
+  if(t.priority==='high') tags.push('<span class="ttag pri-high">🔴 High</span>');
+  if(t.priority==='med')  tags.push('<span class="ttag pri-med">🟡 Medium</span>');
+  if(t.mit&&!t.done)      tags.push('<span class="ttag mit-tag">★ Focus</span>');
+  if(t.carried)           tags.push('<span class="ttag carried">↩ Carried</span>');
+  el.innerHTML=`
+    <div class="task-cb${t.done?' checked':''}" onclick="toggleDone('${t.id}')"></div>
+    <div class="task-body">
+      <div class="task-text">${esc(t.text)}</div>
+      ${tags.length?`<div class="task-tags">${tags.join('')}</div>`:''}
+      ${t.steps&&t.steps.length?renderSteps(t):''}
+      ${t.focusing?renderFocusBar(t):''}
+    </div>
+    <div class="task-menu">
+      ${!t.done?`<button class="tmb" title="Set as focus" onclick="setMIT('${t.id}')">★</button>`:''}
+      ${!t.done?`<button class="tmb" title="Break it down" onclick="breakTask('${t.id}')">🔀</button>`:''}
+      <button class="tmb" title="Delete" onclick="deleteTask('${t.id}')">🗑</button>
+    </div>`;
+  return el;
+}
+
+function renderSteps(t){
+  return `<div class="task-steps open">
+    ${t.steps.map((s,i)=>`
+      <div class="tstep">
+        <div class="tstep-cb${s.done?' done':''}" onclick="toggleStep('${t.id}',${i})"></div>
+        <span class="tstep-txt${s.done?' done':''}">${esc(s.text)}</span>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderFocusBar(t){
+  const rem = t.focusRemain||1500;
+  const mm=Math.floor(rem/60), ss=String(rem%60).padStart(2,'0');
+  return `<div class="focus-timer">
+    <div><div class="ft-time">${mm}:${ss}</div><div class="ft-label">Focus timer running</div></div>
+    <button class="ft-btn stop" onclick="stopFocusTimer('${t.id}')">Stop</button>
+  </div>`;
+}
+
+// ── Task actions ───────────────────────────────────────────────────
+function addTask(text, opts={}){
+  if(!text.trim()) return;
+  const tasks=loadTasks();
+  const isQuick = text.startsWith('!') || opts.quick;
+  const isPriHigh = text.startsWith('!!') || opts.priority==='high';
+  const cleanText = text.replace(/^!+/,'').trim();
+  tasks.push({id:uid(),text:cleanText,done:false,date:TODAY,
+    quick:isQuick,priority:isPriHigh?'high':opts.priority||'',
+    mit:false,carried:false,steps:[],focusing:false});
+  saveTasks(tasks);
+  renderToday();
+}
+
+function toggleDone(id){
+  const tasks=loadTasks();
+  const t=tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.done=!t.done;
+  if(t.done){ t.mit=false; if(S.timer&&t.focusing){clearInterval(S.timer);S.timer=null;} t.focusing=false; }
+  saveTasks(tasks);
+  renderToday();
+  if(t.done){ confetti(); }
+}
+
+function deleteTask(id){
+  saveTasks(loadTasks().filter(t=>t.id!==id));
+  renderToday();
+}
+
+function setMIT(id){
+  const tasks=loadTasks();
+  tasks.forEach(t=>t.mit=false);
+  const t=tasks.find(x=>x.id===id);
+  if(t){ t.mit=true; }
+  saveTasks(tasks);
+  renderToday();
+}
+
+function toggleStep(taskId, stepIdx){
+  const tasks=loadTasks();
+  const t=tasks.find(x=>x.id===taskId);
+  if(t&&t.steps[stepIdx]) t.steps[stepIdx].done=!t.steps[stepIdx].done;
+  // auto-complete task when all steps done
+  if(t&&t.steps.every(s=>s.done)){ t.done=true; t.mit=false; }
+  saveTasks(tasks);
+  renderToday();
+  if(t&&t.done) confetti();
+}
+
+function breakTask(id){
+  const tasks=loadTasks();
+  const t=tasks.find(x=>x.id===id);
+  if(!t) return;
+  // Open a quick modal for breakdown
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">🔀</div>
+      <div class="ex-title">Break It Down</div>
+      <div class="ex-desc">ADHD tip: if a task feels stuck, break it into 3 micro-steps.</div></div>
+    <div class="ib orange"><strong>Task:</strong> ${esc(t.text)}</div>
+    <div class="jlbl" style="margin-top:13px">Step 1 (smallest possible start):</div>
+    <input class="jinput" id="bs1" placeholder="e.g. Open the document">
+    <div class="jlbl" style="margin-top:9px">Step 2:</div>
+    <input class="jinput" id="bs2" placeholder="e.g. Write the first sentence">
+    <div class="jlbl" style="margin-top:9px">Step 3:</div>
+    <input class="jinput" id="bs3" placeholder="e.g. Save and close for now">
+    <div class="btns" style="margin-top:16px">
+      <button class="btn bs" onclick="closeModal()">Cancel</button>
+      <button class="btn bp" onclick="saveBreakdown('${id}')">Save breakdown ✓</button>
+    </div>`;
+  document.getElementById('modal').classList.add('on');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('bs1')?.focus(),300);
+}
+
+window.saveBreakdown=function(id){
+  const s1=document.getElementById('bs1')?.value.trim();
+  const s2=document.getElementById('bs2')?.value.trim();
+  const s3=document.getElementById('bs3')?.value.trim();
+  const steps=[s1,s2,s3].filter(Boolean).map(text=>({text,done:false}));
+  if(!steps.length){ closeModal(); return; }
+  const tasks=loadTasks();
+  const t=tasks.find(x=>x.id===id);
+  if(t) t.steps=steps;
+  saveTasks(tasks);
+  closeModal();
+  renderToday();
+};
+
+// ── Focus timer ────────────────────────────────────────────────────
+function startFocusTimer(id){
+  // stop any existing timer
+  if(S.timer){ clearInterval(S.timer); S.timer=null; }
+  const tasks=loadTasks();
+  tasks.forEach(t=>{ t.focusing=false; });
+  const t=tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.focusing=true; t.focusRemain=1500; // 25 min
+  saveTasks(tasks);
+  renderToday();
+  S.timer=setInterval(()=>{
+    const ts=loadTasks();
+    const task=ts.find(x=>x.id===id);
+    if(!task||!task.focusing){ clearInterval(S.timer);S.timer=null; return; }
+    task.focusRemain=(task.focusRemain||1)||0;
+    task.focusRemain--;
+    if(task.focusRemain<=0){
+      task.focusing=false;
+      saveTasks(ts); renderToday();
+      clearInterval(S.timer); S.timer=null;
+      // completion fanfare
+      document.getElementById('mbody').innerHTML=`
+        <div class="done"><div class="done-em">🎯</div>
+          <h2>Focus session complete!</h2>
+          <p>25 minutes of deep work done. Take a 5-minute break — you earned it.</p>
+          <div class="xp">+25 XP · Focus champion 🏆</div>
+          <div class="btns"><button class="btn bp" onclick="closeModal()">Break time →</button></div>
+        </div>`;
+      document.getElementById('modal').classList.add('on');
+      document.body.style.overflow='hidden';
+      confetti();
+      return;
+    }
+    saveTasks(ts);
+    // live-update timer display without full re-render
+    const el=document.querySelector(`[data-id="${id}"] .ft-time`);
+    if(el){ const r=task.focusRemain; el.textContent=`${Math.floor(r/60)}:${String(r%60).padStart(2,'0')}`; }
+  },1000);
+}
+
+window.stopFocusTimer=function(id){
+  if(S.timer){ clearInterval(S.timer); S.timer=null; }
+  const tasks=loadTasks();
+  const t=tasks.find(x=>x.id===id);
+  if(t){ t.focusing=false; }
+  saveTasks(tasks);
+  renderToday();
+};
+
+// ── Weekly goals ───────────────────────────────────────────────────
+function checkWeekReset(){
+  const saved=localStorage.getItem(WEEK_KEY);
+  if(saved!==nowWeek()){
+    // carry unfinished goals forward with a note
+    const goals=loadWeekly();
+    const carried=goals.filter(g=>g.progress<100).map(g=>({...g,id:uid(),progress:0,carriedFrom:saved||'prev week'}));
+    saveWeekly(carried);
+    localStorage.setItem(WEEK_KEY,nowWeek());
+  }
+}
+
+function renderWeekly(){
+  checkWeekReset();
+  const goals=loadWeekly();
+  const el=document.getElementById('weeklyList');
+  if(!goals.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-ico">🎯</div><div class="empty-msg">No weekly goals yet.<br>What do you want to accomplish this week?</div></div>`;
+    return;
+  }
+  el.innerHTML='';
+  goals.forEach(g=>{
+    const card=document.createElement('div'); card.className='wgoal';
+    const colors=['#7c5cbf','#2c9e98','#e8963a','#3aaa6a','#4a80d4'];
+    const col=colors[goals.indexOf(g)%colors.length];
+    card.innerHTML=`
+      <div class="wgoal-top">
+        <div class="wgoal-ico">${g.icon||'🎯'}</div>
+        <div class="wgoal-text">${esc(g.text)}${g.carriedFrom?'<span class="ttag carried" style="margin-left:6px;vertical-align:middle">↩ carried</span>':''}</div>
+        <div class="wgoal-pct">${g.progress}%</div>
+      </div>
+      <div class="wgoal-bar"><div class="wgoal-fill" style="width:${g.progress}%;background:${col}"></div></div>
+      <div class="wgoal-btns">
+        <button class="wg-btn wg-dec" onclick="adjGoal('weekly','${g.id}',-25)">−25%</button>
+        <button class="wg-btn wg-inc" onclick="adjGoal('weekly','${g.id}',25)">+25%</button>
+        <button class="wg-btn wg-inc" style="background:${g.progress===100?'#c6f6d5':'#f0fff4'}" onclick="adjGoal('weekly','${g.id}',100-${g.progress})">${g.progress===100?'✓ Done':'Mark 100%'}</button>
+        <button class="wg-btn wg-del" onclick="delGoal('weekly','${g.id}')">🗑</button>
+      </div>`;
+    el.appendChild(card);
+  });
+}
+
+// ── Monthly goals ──────────────────────────────────────────────────
+function checkMonthReset(){
+  const saved=localStorage.getItem(MONTH_KEY);
+  if(saved!==nowMonth()){
+    const goals=loadMonthly();
+    // carry unfinished milestones
+    const carried=goals.filter(g=>g.milestones.some(m=>!m.done)).map(g=>({
+      ...g,id:uid(),
+      milestones:g.milestones.map(m=>({...m,done:false})),
+      carriedFrom:saved||'prev month'
+    }));
+    saveMonthly(carried);
+    localStorage.setItem(MONTH_KEY,nowMonth());
+  }
+}
+
+function renderMonthly(){
+  checkMonthReset();
+  const goals=loadMonthly();
+  const el=document.getElementById('monthlyList');
+  if(!goals.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-ico">🌙</div><div class="empty-msg">No monthly goals yet.<br>What's the big thing you want to move on this month?</div></div>`;
+    return;
+  }
+  el.innerHTML='';
+  goals.forEach((g,gi)=>{
+    const doneCt=g.milestones.filter(m=>m.done).length;
+    const total=g.milestones.length||1;
+    const card=document.createElement('div'); card.className='mgoal';
+    card.innerHTML=`
+      <div class="mgoal-title">
+        <span>${g.icon||'🌙'}</span> ${esc(g.text)}
+        ${g.carriedFrom?'<span class="ttag carried" style="margin-left:4px">↩ carried</span>':''}
+        <button class="mgoal-del" onclick="delGoal('monthly','${g.id}')">🗑</button>
+      </div>
+      <div class="wgoal-bar" style="margin-bottom:10px">
+        <div class="wgoal-fill" style="width:${Math.round(doneCt/total*100)}%;background:var(--p)"></div>
+      </div>
+      ${g.milestones.map((m,mi)=>`
+        <div class="milestone">
+          <div class="ms-cb${m.done?' done':''}" onclick="toggleMilestone('${g.id}',${mi})"></div>
+          <span class="ms-txt${m.done?' done':''}">${esc(m.text)}</span>
+        </div>`).join('')}`;
+    el.appendChild(card);
+  });
+}
+
+function adjGoal(type,id,delta){
+  const load=type==='weekly'?loadWeekly:loadMonthly;
+  const save=type==='weekly'?saveWeekly:saveMonthly;
+  const goals=load();
+  const g=goals.find(x=>x.id===id);
+  if(!g) return;
+  g.progress=Math.min(100,Math.max(0,(g.progress||0)+delta));
+  if(g.progress===100) confetti();
+  save(goals);
+  type==='weekly'?renderWeekly():renderMonthly();
+}
+
+function delGoal(type,id){
+  if(type==='weekly'){ saveWeekly(loadWeekly().filter(g=>g.id!==id)); renderWeekly(); }
+  else { saveMonthly(loadMonthly().filter(g=>g.id!==id)); renderMonthly(); }
+}
+
+function toggleMilestone(goalId, mi){
+  const goals=loadMonthly();
+  const g=goals.find(x=>x.id===goalId);
+  if(!g) return;
+  g.milestones[mi].done=!g.milestones[mi].done;
+  if(g.milestones.every(m=>m.done)) confetti();
+  saveMonthly(goals);
+  renderMonthly();
+}
+
+// ── Add goal modal ─────────────────────────────────────────────────
+window.openAddGoal=function(type){
+  const icons=['🎯','💪','📚','🏃','💰','🧠','❤️','🌱','✍️','🎨'];
+  const isMonthly=type==='monthly';
+  document.getElementById('mbody').innerHTML=`
+    <div class="ex-hdr"><div class="ex-emoji">${isMonthly?'🌙':'🎯'}</div>
+      <div class="ex-title">Add ${isMonthly?'Monthly':'Weekly'} Goal</div>
+      <div class="ex-desc">Clear, specific, achievable. One goal at a time.</div></div>
+    <div class="goal-form">
+      <div class="gf-lbl">Goal</div>
+      <input class="jinput" id="goalText" placeholder="${isMonthly?'e.g. Read 2 books, Exercise 3x/week':'e.g. Finish project proposal, Walk 5k steps daily'}" style="font-size:.9rem;padding:10px 13px">
+      <div class="gf-lbl" style="margin-top:12px">Icon</div>
+      <div class="chips" style="margin-top:4px" id="iconPick">
+        ${icons.map(ic=>`<div class="chip" onclick="pickIcon(this,'${ic}')">${ic}</div>`).join('')}
+      </div>
+      ${isMonthly?`
+      <div class="gf-lbl" style="margin-top:12px">Milestones (add 2–4 checkpoints)</div>
+      <input class="jinput" id="ms1" placeholder="Step 1" style="margin-bottom:6px">
+      <input class="jinput" id="ms2" placeholder="Step 2" style="margin-bottom:6px">
+      <input class="jinput" id="ms3" placeholder="Step 3">
+      `:''}
+    </div>
+    <div class="btns" style="margin-top:16px">
+      <button class="btn bs" onclick="closeModal()">Cancel</button>
+      <button class="btn bp" onclick="saveNewGoal('${type}')">Add goal ✓</button>
+    </div>`;
+  document.getElementById('modal').classList.add('on');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('goalText')?.focus(),300);
+  window._goalIcon=icons[0];
+  document.querySelector('#iconPick .chip')?.classList.add('on');
+};
+
+window.pickIcon=function(el,ico){
+  document.querySelectorAll('#iconPick .chip').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on'); window._goalIcon=ico;
+};
+
+window.saveNewGoal=function(type){
+  const text=document.getElementById('goalText')?.value.trim();
+  if(!text){ document.getElementById('goalText')?.focus(); return; }
+  if(type==='weekly'){
+    const goals=loadWeekly();
+    if(goals.length>=5){ alert('Max 5 weekly goals — ADHD brains work better with fewer targets!'); return; }
+    goals.push({id:uid(),text,icon:window._goalIcon||'🎯',progress:0});
+    saveWeekly(goals); closeModal(); renderWeekly();
+  } else {
+    const goals=loadMonthly();
+    if(goals.length>=3){ alert('Max 3 monthly goals — keep your focus sharp!'); return; }
+    const ms=[
+      document.getElementById('ms1')?.value.trim(),
+      document.getElementById('ms2')?.value.trim(),
+      document.getElementById('ms3')?.value.trim(),
+    ].filter(Boolean).map(t=>({text:t,done:false}));
+    goals.push({id:uid(),text,icon:window._goalIcon||'🌙',milestones:ms.length?ms:[{text:'Complete',done:false}]});
+    saveMonthly(goals); closeModal(); renderMonthly();
+  }
+};
+
+// ── Tab switching for task seg ─────────────────────────────────────
+function initTaskTab(){
+  document.querySelectorAll('.task-sego').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.task-sego').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    ['today','weekly','monthly'].forEach(p=>{
+      document.getElementById('ts-'+p).style.display=b.dataset.ts===p?'':'none';
+    });
+    if(b.dataset.ts==='today') renderToday();
+    if(b.dataset.ts==='weekly') renderWeekly();
+    if(b.dataset.ts==='monthly') renderMonthly();
+  }));
+
+  // Quick-add
+  const inp=document.getElementById('taskInput');
+  const addFn=()=>{ addTask(inp.value); inp.value=''; inp.focus(); };
+  document.getElementById('taskAddBtn').addEventListener('click',addFn);
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter') addFn(); });
+
+  // Options row hint on focus
+  inp.addEventListener('focus',()=>{
+    if(!document.getElementById('addHint')){
+      const h=document.createElement('div');
+      h.id='addHint'; h.style.cssText='font-size:.7rem;color:var(--muted);margin:-8px 0 8px;line-height:1.6';
+      h.innerHTML='<strong>!!text</strong> = high priority &nbsp;·&nbsp; <strong>!text</strong> = 2-min task &nbsp;·&nbsp; <strong>★</strong> button = set as focus';
+      inp.parentNode.insertAdjacentElement('afterend',h);
+    }
+  });
+
+  renderToday();
+}
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── CONFETTI & UTILS ───────────────────────────────────────────────
+function confetti(){
+  const cols=['#7c5cbf','#ed64a6','#f6ad55','#48bb78','#38b2ac','#5b6abf','#fc8181'];
+  const c=document.getElementById('cfx'); c.innerHTML='';
+  for(let i=0;i<55;i++){
+    const el=document.createElement('div'); el.className='cf';
+    el.style.cssText=`left:${Math.random()*100}vw;background:${cols[i%cols.length]};
+      width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      --cd:${1.5+Math.random()*2}s;--cx:${Math.random()*.8}s;
+      transform:rotate(${Math.random()*360}deg)`;
+    c.appendChild(el);
+  }
+  setTimeout(()=>c.innerHTML='',4000);
+}
+function fmt(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}
+
+init();
+</script>
+</body>
+</html>
