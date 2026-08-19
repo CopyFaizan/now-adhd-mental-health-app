@@ -390,6 +390,71 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
 @keyframes fup{from{opacity:0;transform:translateY(17px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.11)}100%{transform:scale(1)}}
+@keyframes shred{0%{opacity:1;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1) skewX(2deg)}100%{opacity:0;transform:scaleY(0) skewX(-8deg) translateY(40px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* ── MIND DUMP ─────────────────────────────────────────── */
+.dump-card{background:linear-gradient(135deg,#1a1a2e,#16213e);
+  border-radius:var(--r);padding:15px 18px;margin-bottom:13px;
+  cursor:pointer;transition:transform .2s;border:none;width:100%;
+  text-align:left;box-shadow:0 6px 22px rgba(26,26,46,.35);
+  animation:fup .5s ease .25s both}
+.dump-card:hover{transform:translateY(-2px)}
+.dump-card:active{transform:scale(.98)}
+.dump-rr{display:flex;align-items:center;gap:10px}
+.dump-ico{font-size:1.5rem}
+.dump-title{color:#e2e8f0;font-weight:700;font-size:.92rem}
+.dump-sub{color:rgba(226,232,240,.55);font-size:.75rem;margin-top:2px}
+.dump-dot{width:8px;height:8px;border-radius:50%;background:#a78bfa;
+  margin-left:auto;animation:blink 2s ease-in-out infinite}
+
+/* dump modal */
+.dump-area{width:100%;border:2px solid #e2e8f0;border-radius:14px;
+  padding:14px 15px;font-size:.92rem;font-family:inherit;color:var(--text);
+  resize:none;line-height:1.7;background:var(--bg);min-height:160px;
+  transition:border-color .2s;letter-spacing:.01em}
+.dump-area:focus{outline:none;border-color:var(--p);background:#fff}
+.dump-area::placeholder{color:#a0aec0;line-height:1.7}
+.dump-count{font-size:.68rem;color:var(--muted);text-align:right;margin-top:4px}
+
+/* sort chips */
+.sort-chip{padding:9px 14px;border-radius:12px;border:2px solid #e2e8f0;
+  font-size:.83rem;cursor:pointer;background:#fff;
+  transition:all .2s;font-weight:600;color:var(--text);text-align:center}
+.sort-chip:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.sort-chip.on{border-color:transparent;color:#fff;animation:pop .25s ease;
+  box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.sort-chip[data-cat="worry"].on{background:linear-gradient(135deg,#e05c5c,#d45f96)}
+.sort-chip[data-cat="anger"].on{background:linear-gradient(135deg,#e8963a,#e05c5c)}
+.sort-chip[data-cat="sadness"].on{background:linear-gradient(135deg,#4a80d4,#5b6abf)}
+.sort-chip[data-cat="idea"].on{background:linear-gradient(135deg,#3aaa6a,#2c9e98)}
+.sort-chip[data-cat="task"].on{background:linear-gradient(135deg,#7c5cbf,#5b6abf)}
+.sort-chip[data-cat="noise"].on{background:linear-gradient(135deg,#718096,#a0aec0)}
+.sort-chip[data-cat="selfcrit"].on{background:linear-gradient(135deg,#d45f96,#7c5cbf)}
+
+/* action panel */
+.dump-action{border-radius:13px;padding:14px 15px;margin-top:12px;
+  animation:fup .35s ease}
+.shred-btn{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#e2e8f0;
+  border:none;border-radius:12px;padding:12px 20px;font-size:.88rem;
+  font-weight:700;cursor:pointer;width:100%;transition:all .2s;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.shred-btn:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(26,26,46,.4)}
+.shred-btn:active{transform:scale(.97)}
+
+/* past dumps list */
+.pdump{background:var(--bg);border-radius:10px;padding:11px 13px;
+  margin-bottom:7px;font-size:.82rem;color:var(--muted);line-height:1.55;
+  position:relative;border-left:3px solid #e2e8f0}
+.pdump.worry{border-color:var(--red)}.pdump.anger{border-color:var(--orange)}
+.pdump.sadness{border-color:var(--blue)}.pdump.idea{border-color:var(--green)}
+.pdump.task{border-color:var(--p)}.pdump.noise{border-color:var(--muted)}
+.pdump.selfcrit{border-color:var(--pink)}
+.pdump-meta{font-size:.67rem;color:var(--muted);margin-top:5px;
+  display:flex;align-items:center;gap:8px}
+.pdump-del{background:none;border:none;cursor:pointer;color:var(--muted);
+  font-size:.8rem;margin-left:auto;opacity:0;transition:opacity .2s}
+.pdump:hover .pdump-del{opacity:1}
 
 /* ── TASKS TAB ─────────────────────────────────────────── */
 /* MIT card */
@@ -620,6 +685,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
         <div><div class="rt">Mind spiraling? Tap here.</div>
           <div class="rs">60-second reset · no setup needed</div></div>
         <div class="rd"></div>
+      </div>
+    </button>
+
+    <button class="dump-card" onclick="openEx('minddump')">
+      <div class="dump-rr">
+        <span class="dump-ico">🌀</span>
+        <div>
+          <div class="dump-title">Mind Dump</div>
+          <div class="dump-sub">Thoughts racing? Get them out. No filter, no judgment.</div>
+        </div>
+        <div class="dump-dot"></div>
       </div>
     </button>
 
@@ -1071,7 +1147,7 @@ function updateStats(){
 
 // ── MODAL ──────────────────────────────────────────────────────────
 function openEx(t){
-  const map={breath,bodyscan,thoughts,acceptance,senses,ego,rescue,accepts,selfsoothe,safetybehaviors,selfsoothe2,mindfulactivity,mindfulmeditation};
+  const map={breath,bodyscan,thoughts,acceptance,senses,ego,rescue,accepts,selfsoothe,safetybehaviors,selfsoothe2,mindfulactivity,mindfulmeditation,minddump};
   if(!map[t])return;
   document.getElementById('mbody').innerHTML='';
   map[t]();
@@ -1790,6 +1866,216 @@ function mindfulmeditation(){
   });
 }
 
+// ── MIND DUMP ──────────────────────────────────────────────────────
+function loadDumps(){ return JSON.parse(localStorage.getItem('nw_dumps')||'[]'); }
+function saveDumps(d){ localStorage.setItem('nw_dumps',JSON.stringify(d)); }
+
+const CATS={
+  worry:  {emoji:'😰',label:'Worry / anxiety',    color:'var(--red)',   action:'challenge'},
+  anger:  {emoji:'😤',label:'Anger / frustration', color:'var(--orange)',action:'regulate'},
+  sadness:{emoji:'😔',label:'Sadness / hurt',      color:'var(--blue)',  action:'soothe'},
+  idea:   {emoji:'💡',label:'Idea to keep',        color:'var(--green)', action:'save'},
+  task:   {emoji:'📋',label:'Something to do',     color:'var(--p)',     action:'task'},
+  selfcrit:{emoji:'🎭',label:'Self-criticism',     color:'var(--pink)',  action:'ego'},
+  noise:  {emoji:'🌀',label:'Just mental noise',   color:'var(--muted)', action:'shred'},
+};
+
+function minddump(){
+  let dumpText='', selectedCats=[], phase='write';
+
+  function renderWrite(){
+    document.getElementById('mbody').innerHTML=`
+      <div class="ex-hdr">
+        <div class="ex-emoji">🌀</div>
+        <div class="ex-title">Mind Dump</div>
+        <div class="ex-desc">Get it ALL out. No filter. No fixing. No judgment. Just words.</div>
+      </div>
+      <div class="ib" style="background:linear-gradient(135deg,#1a1a2e18,#16213e12);border-color:#7c5cbf55;margin-bottom:12px">
+        <strong>ADHD note:</strong> Your brain can't think clearly when it's full. This empties the buffer so you can actually function.
+      </div>
+      <textarea class="dump-area" id="dumpArea"
+        placeholder="What's in your head right now? Worries, rants, random thoughts, things you're scared of, things that feel unfair, things you can't stop thinking about — just let it come out…"
+        oninput="document.getElementById('dumpCt').textContent=this.value.length+' chars'"
+        autofocus></textarea>
+      <div class="dump-count" id="dumpCt">0 chars</div>
+      <div class="btns" style="margin-top:14px">
+        <button class="btn bs" onclick="closeModal()">Close</button>
+        <button class="btn bp" id="dumpNext">Get it out →</button>
+      </div>
+      ${loadDumps().length?`<button style="background:none;border:none;color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;width:100%;margin-top:8px;padding:6px" onclick="showPastDumps()">See past dumps (${loadDumps().length})</button>`:''}`;
+    setTimeout(()=>document.getElementById('dumpArea')?.focus(),300);
+    document.getElementById('dumpNext').addEventListener('click',()=>{
+      dumpText=document.getElementById('dumpArea').value.trim();
+      if(!dumpText){ document.getElementById('dumpArea').style.animation='shake .4s ease'; setTimeout(()=>document.getElementById('dumpArea').style.animation='',500); return; }
+      renderSort();
+    });
+  }
+
+  function renderSort(){
+    document.getElementById('mbody').innerHTML=`
+      <div class="ex-hdr">
+        <div class="ex-emoji">🗂️</div>
+        <div class="ex-title">What is this?</div>
+        <div class="ex-desc">Tag it — one or more. Then decide what to do with it.</div>
+      </div>
+      <div style="background:var(--bg);border-radius:11px;padding:11px 13px;margin-bottom:14px;font-size:.83rem;color:var(--muted);line-height:1.55;font-style:italic;max-height:80px;overflow:hidden;position:relative">
+        "${dumpText.length>120?dumpText.substring(0,120)+'…':dumpText}"
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px" id="catGrid">
+        ${Object.entries(CATS).map(([k,c])=>`
+          <div class="sort-chip" data-cat="${k}" onclick="toggleCat(this,'${k}')">
+            ${c.emoji} ${c.label}
+          </div>`).join('')}
+      </div>
+      <div id="dumpActionArea"></div>
+      <div class="btns" style="margin-top:14px">
+        <button class="btn bs" onclick="renderWriteAgain()">← Edit</button>
+        <button class="btn bp" id="dumpProcess" style="display:none">Done →</button>
+      </div>`;
+    renderAction();
+  }
+
+  window.renderWriteAgain=()=>{ selectedCats=[]; renderWrite(); setTimeout(()=>{ const a=document.getElementById('dumpArea'); if(a){ a.value=dumpText; document.getElementById('dumpCt').textContent=dumpText.length+' chars'; a.focus(); }},50); };
+
+  window.toggleCat=function(el, key){
+    el.classList.toggle('on');
+    if(selectedCats.includes(key)) selectedCats=selectedCats.filter(c=>c!==key);
+    else selectedCats.push(key);
+    renderAction();
+  };
+
+  function renderAction(){
+    const area=document.getElementById('dumpActionArea');
+    const proc=document.getElementById('dumpProcess');
+    if(!selectedCats.length){ area.innerHTML=''; if(proc) proc.style.display='none'; return; }
+    if(proc) proc.style.display='';
+
+    // build action suggestions
+    const actions=[];
+    if(selectedCats.includes('worry'))   actions.push({icon:'💭',text:'Challenge this thought with CBT',btn:'Challenge it →',fn:`closeModal();setTimeout(()=>openEx('thoughts'),300)`});
+    if(selectedCats.includes('anger')||selectedCats.includes('sadness')) actions.push({icon:'💆',text:'Regulate with Emotional First Aid',btn:'Regulate →',fn:`closeModal();setTimeout(()=>openEx('selfsoothe2'),300)`});
+    if(selectedCats.includes('selfcrit')) actions.push({icon:'🎭',text:'See your inner critic clearly',btn:'Ego Observer →',fn:`closeModal();setTimeout(()=>openEx('ego'),300)`});
+    if(selectedCats.includes('idea'))    actions.push({icon:'💡',text:'Save this idea',btn:'Save idea',fn:`saveDumpIdea()`});
+    if(selectedCats.includes('task'))    actions.push({icon:'📋',text:'Add this to today\'s tasks',btn:'Add to tasks',fn:`dumpToTask()`});
+    if(selectedCats.includes('noise')||selectedCats.every(c=>c==='noise'))  actions.push({icon:'🗑',text:'It\'s just noise. Let it go.',btn:'Shred it 🔥',fn:`shredDump()`});
+
+    // always offer shred
+    if(!selectedCats.includes('noise')) actions.push({icon:'🔥',text:'I just needed to get it out.',btn:'Shred & release',fn:`shredDump()`});
+
+    area.innerHTML=`
+      <div class="dump-action" style="background:var(--bg)">
+        <div style="font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">What do you want to do with this?</div>
+        ${actions.map(a=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border-radius:10px;margin-bottom:7px;box-shadow:var(--sh)">
+            <span style="font-size:1.3rem">${a.icon}</span>
+            <span style="font-size:.83rem;color:var(--text);flex:1">${a.text}</span>
+            <button class="btn bp" style="padding:6px 11px;font-size:.74rem;white-space:nowrap" onclick="${a.fn}">${a.btn}</button>
+          </div>`).join('')}
+      </div>`;
+
+    document.getElementById('dumpProcess').addEventListener('click', ()=>saveDump());
+    // prevent double-binding
+    const newBtn=document.getElementById('dumpProcess').cloneNode(true);
+    document.getElementById('dumpProcess').replaceWith(newBtn);
+    newBtn.addEventListener('click', saveDump);
+  }
+
+  function saveDump(){
+    const dumps=loadDumps();
+    dumps.unshift({id:uid(),text:dumpText,cats:selectedCats,ts:Date.now()});
+    if(dumps.length>50) dumps.pop(); // keep last 50
+    saveDumps(dumps);
+    document.getElementById('mbody').innerHTML=`
+      <div class="done">
+        <div class="done-em">🌿</div>
+        <h2>Out of your head.</h2>
+        <p>You've emptied the buffer. Your mind is a little lighter now.</p>
+        <div class="xp">+5 XP · Clarity unlocked</div>
+        <div class="btns">
+          <button class="btn bp" onclick="closeModal()">Close</button>
+          <button class="btn bs" onclick="minddump()">Dump again</button>
+        </div>
+      </div>`;
+    confetti();
+  }
+
+  window.shredDump=function(){
+    const sheet=document.getElementById('msheet');
+    sheet.style.animation='shred .5s ease forwards';
+    setTimeout(()=>{
+      sheet.style.animation='';
+      // save as shredded (no cats)
+      const dumps=loadDumps();
+      dumps.unshift({id:uid(),text:dumpText,cats:['noise'],ts:Date.now(),shredded:true});
+      if(dumps.length>50) dumps.pop();
+      saveDumps(dumps);
+      document.getElementById('mbody').innerHTML=`
+        <div class="done">
+          <div class="done-em">🔥</div>
+          <h2>Gone. Shredded.</h2>
+          <p>It existed. You acknowledged it. Now it's released. That's enough.</p>
+          <div class="btns">
+            <button class="btn bp" onclick="closeModal()">Done</button>
+            <button class="btn bs" onclick="minddump()">Dump more</button>
+          </div>
+        </div>`;
+    },500);
+  };
+
+  window.dumpToTask=function(){
+    const short=dumpText.length>80?dumpText.substring(0,80).trimEnd()+'…':dumpText;
+    saveDump();
+    addTask(short);
+    // switch to tasks tab
+    setTimeout(()=>{
+      closeModal();
+      document.querySelector('[data-t="tasks"]').click();
+    },1800);
+  };
+
+  window.saveDumpIdea=function(){
+    const ideas=JSON.parse(localStorage.getItem('nw_ideas')||'[]');
+    ideas.unshift({id:uid(),text:dumpText,ts:Date.now()});
+    localStorage.setItem('nw_ideas',JSON.stringify(ideas));
+    saveDump();
+  };
+
+  window.showPastDumps=function(){
+    const dumps=loadDumps();
+    document.getElementById('mbody').innerHTML=`
+      <div class="ex-hdr"><div class="ex-emoji">📜</div>
+        <div class="ex-title">Past Dumps</div>
+        <div class="ex-desc">Your brain's history. Read, process, or clear them.</div></div>
+      <div id="pastList" style="max-height:55vh;overflow-y:auto">
+        ${!dumps.length?'<div class="empty-state"><div class="empty-ico">🌿</div><div class="empty-msg">No past dumps yet.</div></div>':
+          dumps.map(d=>`
+          <div class="pdump ${d.cats?.[0]||''}" id="pd-${d.id}">
+            <div>${esc(d.shredded?'[shredded]':d.text.length>150?d.text.substring(0,150)+'…':d.text)}</div>
+            <div class="pdump-meta">
+              ${d.cats?.map(c=>CATS[c]?CATS[c].emoji+' '+CATS[c].label:'').filter(Boolean).join(' · ')}
+              <span style="margin-left:auto">${new Date(d.ts).toLocaleDateString('en',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
+              <button class="pdump-del" onclick="deleteDump('${d.id}')">🗑</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="btns" style="margin-top:14px">
+        <button class="btn bs" onclick="minddump()">← New dump</button>
+        <button class="btn" style="background:#fff5f5;color:var(--red);border:none;border-radius:12px;padding:12px;font-size:.88rem;font-weight:700;cursor:pointer" onclick="clearAllDumps()">Clear all</button>
+      </div>`;
+  };
+
+  window.deleteDump=function(id){
+    saveDumps(loadDumps().filter(d=>d.id!==id));
+    document.getElementById('pd-'+id)?.remove();
+  };
+
+  window.clearAllDumps=function(){
+    if(confirm('Clear all past dumps?')){ saveDumps([]); showPastDumps(); }
+  };
+
+  renderWrite();
+}
+
 // ── RESCUE ─────────────────────────────────────────────────────────
 function rescue(){
   document.getElementById('mbody').innerHTML=`
@@ -1804,6 +2090,7 @@ function rescue(){
       <div class="ropt" onclick="openEx('accepts')"><div class="ropt-ico">🎯</div><div class="ropt-info"><strong>ACCEPTS Toolkit</strong><span>DBT distraction — ride the wave safely</span></div></div>
       <div class="ropt" onclick="openEx('selfsoothe')"><div class="ropt-ico">🌸</div><div class="ropt-info"><strong>Self-Soothe</strong><span>Calm your nervous system through your senses</span></div></div>
       <div class="ropt" onclick="openEx('selfsoothe2')"><div class="ropt-ico">💆</div><div class="ropt-info"><strong>Emotional First Aid</strong><span>5-step plan for emotional flooding</span></div></div>
+      <div class="ropt" onclick="openEx('minddump')"><div class="ropt-ico">🌀</div><div class="ropt-info"><strong>Mind Dump</strong><span>Get it all out — then sort it</span></div></div>
     </div>
     <div class="btns"><button class="btn bs" onclick="closeModal()">Close</button></div>`;
 }
