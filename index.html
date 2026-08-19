@@ -8,8 +8,9 @@
 :root{
   --p:#7c5cbf;--p2:#5b6abf;--teal:#2c9e98;--orange:#e8963a;
   --pink:#d45f96;--green:#3aaa6a;--red:#e05c5c;--blue:#4a80d4;
-  --bg:#f0f4ff;--card:#fff;--text:#2d3748;--muted:#718096;
-  --r:18px;--sh:0 6px 24px rgba(124,92,191,.11);
+  --bg:#0f0f0f;--card:#1a1a1a;--text:#f1f1f1;--muted:#aaaaaa;
+  --r:12px;--sh:0 2px 8px rgba(0,0,0,.4);
+  --border:#3f3f3f;--hover:#272727;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -51,14 +52,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .mbtn{font-size:1.45rem;background:none;border:2px solid transparent;
   border-radius:9px;padding:6px 8px;cursor:pointer;transition:all .2s;flex:1;text-align:center}
 .mbtn:hover{transform:scale(1.2);background:var(--bg)}
-.mbtn.on{border-color:var(--p);background:#f3eeff;transform:scale(1.12);animation:pop .3s ease}
+.mbtn.on{border-color:var(--p);background:#2d1a4a;transform:scale(1.12);animation:pop .3s ease}
 .mtxt{text-align:center;margin-top:7px;font-size:.8rem;color:var(--p);font-weight:600;min-height:16px}
 
 /* PROGRESS */
 .prog{background:var(--card);border-radius:var(--r);padding:14px 17px;
   margin-bottom:13px;box-shadow:var(--sh);display:flex;align-items:center;
   gap:13px;animation:fup .5s ease .15s both}
-.rbg{fill:none;stroke:#e2e8f0;stroke-width:6}
+.rbg{fill:none;stroke:#3f3f3f;stroke-width:6}
 .rfill{fill:none;stroke:url(#rg);stroke-width:6;stroke-linecap:round;
   stroke-dasharray:201;stroke-dashoffset:201;
   transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1s ease}
@@ -135,14 +136,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   .bnav{
     position:fixed;top:0;left:0;bottom:0;right:auto;
     flex-direction:column;align-items:stretch;
-    width:220px;border-top:none;border-right:1px solid #e2e8f0;
+    width:220px;border-top:none;border-right:1px solid #272727;
+    background:#0f0f0f;
     padding:24px 0 24px;gap:4px;overflow-y:auto;justify-content:flex-start;
   }
   .bnav::before{
     content:'⚡ Now';font-size:1.3rem;font-weight:900;
     background:linear-gradient(135deg,var(--p),var(--pink));
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    padding:0 20px 20px;letter-spacing:-.5px;display:block;border-bottom:1px solid #e2e8f0;margin-bottom:8px;
+    padding:0 20px 20px;letter-spacing:-.5px;display:block;border-bottom:1px solid #272727;margin-bottom:8px;
   }
   .nb{
     flex:0 0 auto;flex-direction:row;align-items:center;justify-content:flex-start;
@@ -150,11 +152,78 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     margin-right:12px;font-size:.88rem;font-weight:600;text-align:left;
   }
   .nb .ni{font-size:1.35rem;min-width:24px;text-align:center}
-  .nb:hover{background:rgba(124,92,191,.07);color:var(--text)}
-  .nb.on{background:rgba(124,92,191,.12);color:var(--p)}
+  .nb:hover{background:#272727;color:var(--text)}
+  .nb.on{background:#272727;color:var(--p)}
   .nb.on .nb-label{font-weight:700}
   .nb:hover .ni{transform:scale(1.12)}
 }
+
+/* ── YOUTUBE GRID ── */
+.yt-hdr{display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0 4px;}
+.yt-hdr-title{font-size:1.4rem;font-weight:700;color:var(--text)}
+.yt-streak{font-size:.82rem;color:var(--muted);background:#272727;
+  padding:5px 12px;border-radius:20px;font-weight:600}
+
+.yt-chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0 16px;
+  scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:10;}
+.yt-chips::-webkit-scrollbar{display:none}
+.yt-chip{background:#272727;color:#f1f1f1;border:none;
+  padding:7px 14px;border-radius:8px;font-size:.82rem;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.yt-chip:hover{background:#3f3f3f}
+.yt-chip.on{background:#f1f1f1;color:#0f0f0f;font-weight:700}
+
+.yt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 16px;padding-bottom:32px}
+@media(max-width:900px){.yt-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.yt-grid{grid-template-columns:1fr;gap:0;}}
+
+.yt-card{cursor:pointer;background:none;border:none;text-align:left;
+  width:100%;padding:0;transition:opacity .15s}
+.yt-card:hover{opacity:.88}
+.yt-card[data-hidden]{display:none}
+
+/* mobile: YouTube mobile single-col with horizontal thumbnail */
+@media(max-width:640px){
+  .yt-card{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #1a1a1a}
+}
+
+.yt-thumb{width:100%;aspect-ratio:16/9;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;flex-shrink:0}
+@media(max-width:640px){
+  .yt-thumb{width:160px;height:90px;border-radius:8px;flex-shrink:0}
+}
+.yt-thumb-emoji{font-size:3.2rem;filter:drop-shadow(0 3px 10px rgba(0,0,0,.5));
+  pointer-events:none}
+.yt-dur{position:absolute;bottom:6px;right:7px;
+  background:rgba(0,0,0,.85);color:#fff;font-size:.7rem;font-weight:700;
+  padding:2px 6px;border-radius:4px;letter-spacing:.02em}
+.yt-done-badge{position:absolute;top:6px;left:7px;
+  background:rgba(60,190,100,.9);color:#fff;font-size:.65rem;font-weight:700;
+  padding:2px 7px;border-radius:4px}
+
+.yt-meta{display:flex;gap:10px;align-items:flex-start;margin-top:10px}
+@media(max-width:640px){
+  .yt-meta{margin-top:0;flex:1}
+}
+.yt-ch-ico{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1rem}
+@media(max-width:640px){.yt-ch-ico{display:none}}
+.yt-info{flex:1;min-width:0}
+.yt-title{font-size:.92rem;font-weight:600;color:var(--text);
+  line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;margin-bottom:3px}
+.yt-channel{font-size:.78rem;color:var(--muted);margin-bottom:2px}
+.yt-stats{font-size:.76rem;color:var(--muted)}
+.yt-more{background:none;border:none;color:var(--muted);
+  cursor:pointer;padding:2px 6px;font-size:1.1rem;flex-shrink:0;
+  border-radius:50%;transition:background .15s;align-self:flex-start;margin-top:-2px}
+.yt-more:hover{background:#272727}
+
+/* hide old home cards on home tab */
+#tab-home .slbl,#tab-home .cards,#tab-home .quote,
+#tab-home .mood,#tab-home .prog,#tab-home .rescue,#tab-home .dump-card{display:none}
 
 /* TABS */
 .tab{display:none}.tab.on{display:block}
@@ -165,18 +234,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   display:flex;align-items:flex-end;justify-content:center;
   pointer-events:none;transition:all .35s ease}
 .modal.on{background:rgba(0,0,0,.52);backdrop-filter:blur(5px);pointer-events:all}
-.msheet{background:#fff;border-radius:26px 26px 0 0;
+.msheet{background:#212121;border-radius:26px 26px 0 0;
   width:100%;max-width:500px;max-height:92vh;overflow-y:auto;
   padding:10px 22px 44px;transform:translateY(100%);
   transition:transform .4s cubic-bezier(.16,1,.3,1);
-  box-shadow:0 -5px 32px rgba(0,0,0,.16)}
+  box-shadow:0 -5px 32px rgba(0,0,0,.5)}
 .modal.on .msheet{transform:translateY(0)}
-.drag{width:36px;height:4px;background:#e2e8f0;border-radius:4px;margin:0 auto 17px}
+.drag{width:36px;height:4px;background:#3f3f3f;border-radius:4px;margin:0 auto 17px}
 .mclose{position:absolute;top:17px;right:17px;width:33px;height:33px;
-  border-radius:50%;background:var(--bg);border:none;cursor:pointer;
+  border-radius:50%;background:#3f3f3f;border:none;cursor:pointer;
   font-size:.9rem;display:flex;align-items:center;justify-content:center;
   color:var(--muted);transition:all .2s}
-.mclose:hover{background:#e2e8f0}
+.mclose:hover{background:#555}
 
 /* EXERCISE COMPONENTS */
 .ex-hdr{text-align:center;margin-bottom:18px;position:relative}
@@ -200,9 +269,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 /* STEPS */
 .steps{margin:13px 0}
 .step{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;
-  border-radius:10px;margin-bottom:6px;background:var(--bg);
+  border-radius:10px;margin-bottom:6px;background:#272727;
   opacity:.42;transition:all .38s ease}
-.step.on{background:#f3eeff;opacity:1;transform:scale(1.01)}
+.step.on{background:#2d1a4a;opacity:1;transform:scale(1.01)}
 .snum{width:24px;height:24px;border-radius:50%;background:var(--p);color:#fff;
   font-size:.73rem;font-weight:700;display:flex;align-items:center;
   justify-content:center;flex-shrink:0}
@@ -210,41 +279,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
 /* INPUTS */
 .jlbl{font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:600}
-.jtxt{width:100%;border:2px solid #e2e8f0;border-radius:11px;
+.jtxt{width:100%;border:2px solid #3f3f3f;border-radius:11px;
   padding:11px 13px;font-size:.86rem;font-family:inherit;
   color:var(--text);resize:none;transition:border-color .2s;
-  background:var(--bg);line-height:1.55;min-height:76px}
-.jtxt:focus{outline:none;border-color:var(--p);background:#fff}
-.jtxt::placeholder{color:#a0aec0}
-.jinput{width:100%;border:2px solid #e2e8f0;border-radius:9px;
+  background:#272727;line-height:1.55;min-height:76px}
+.jtxt:focus{outline:none;border-color:var(--p);background:#2a2a2a}
+.jtxt::placeholder{color:#666}
+.jinput{width:100%;border:2px solid #3f3f3f;border-radius:9px;
   padding:8px 12px;font-size:.85rem;font-family:inherit;
-  color:var(--text);transition:border-color .2s;background:#fff}
+  color:var(--text);transition:border-color .2s;background:#272727}
 .jinput:focus{outline:none;border-color:var(--teal)}
-.jinput::placeholder{color:#a0aec0}
+.jinput::placeholder{color:#666}
 
 /* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}
-.chip{padding:5px 12px;border-radius:20px;border:2px solid #e2e8f0;
-  font-size:.78rem;cursor:pointer;background:#fff;
+.chip{padding:5px 12px;border-radius:20px;border:2px solid #3f3f3f;
+  font-size:.78rem;cursor:pointer;background:#272727;
   transition:all .18s;font-weight:600;color:var(--muted)}
 .chip:hover{border-color:var(--p);color:var(--p)}
 .chip.on{background:var(--p);border-color:var(--p);color:#fff;animation:pop .22s ease}
 
 /* INFO BOXES */
-.ib{background:linear-gradient(135deg,#f3eeff,#e8f4ff);border-radius:10px;
+.ib{background:#1e1830;border-radius:10px;
   padding:12px 13px;margin:10px 0;font-size:.83rem;color:var(--text);
   line-height:1.55;border-left:4px solid var(--p)}
 .ib strong{color:var(--p)}
-.ib.teal{background:linear-gradient(135deg,#e6fffa,#ebf8ff);border-color:var(--teal)}
+.ib.teal{background:#0d1f1e;border-color:var(--teal)}
 .ib.teal strong{color:var(--teal)}
-.ib.orange{background:#fffaf0;border-color:var(--orange)}
-.ib.orange strong{color:#c05621}
-.ib.green{background:#f0fff4;border-color:var(--green)}
-.ib.green strong{color:#276749}
-.ib.blue{background:#ebf4ff;border-color:var(--blue)}
-.ib.blue strong{color:#2c5282}
-.ib.red{background:#fff5f5;border-color:var(--red)}
-.ib.red strong{color:#9b2c2c}
+.ib.orange{background:#1f1300;border-color:var(--orange)}
+.ib.orange strong{color:var(--orange)}
+.ib.green{background:#0d1f12;border-color:var(--green)}
+.ib.green strong{color:var(--green)}
+.ib.blue{background:#0d1525;border-color:var(--blue)}
+.ib.blue strong{color:var(--blue)}
+.ib.red{background:#1f0d0d;border-color:var(--red)}
+.ib.red strong{color:var(--red)}
 
 /* PROGRESS BAR */
 .pbar-wrap{background:var(--bg);border-radius:7px;height:6px;margin:13px 0;overflow:hidden}
@@ -268,9 +337,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
 /* RESCUE OPTIONS */
 .ropt{display:flex;gap:12px;align-items:center;padding:12px 14px;
-  background:var(--bg);border-radius:11px;cursor:pointer;
+  background:#272727;border-radius:11px;cursor:pointer;
   transition:all .2s;border:2px solid transparent;margin-bottom:8px}
-.ropt:hover{border-color:#e85d5d;background:#fff5f5;transform:translateX(3px)}
+.ropt:hover{border-color:#e85d5d;background:#2a1010;transform:translateX(3px)}
 .ropt-ico{font-size:1.65rem;flex-shrink:0}
 .ropt-info strong{font-size:.86rem;display:block;color:var(--text)}
 .ropt-info span{font-size:.76rem;color:var(--muted)}
@@ -283,7 +352,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   color:#fff;box-shadow:0 4px 13px rgba(124,92,191,.28)}
 .bp:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(124,92,191,.36)}
 .bp:active{transform:scale(.98)}
-.bs{background:var(--bg);color:var(--muted)}.bs:hover{background:#e2e8f0}
+.bs{background:#272727;color:var(--muted)}.bs:hover{background:#3f3f3f}
 .bt{background:linear-gradient(135deg,var(--teal),#4299e1);color:#fff;
   box-shadow:0 4px 13px rgba(44,158,152,.24)}.bt:hover{transform:translateY(-2px)}
 .bo{background:linear-gradient(135deg,var(--orange),#f6ad55);color:#fff}
@@ -313,10 +382,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .dname{font-weight:700;font-size:.88rem;flex:1}
 .darr{color:var(--muted);transition:transform .3s;font-size:1rem}
 .dc.open .darr{transform:rotate(90deg)}
-.dbody{display:none;margin-top:11px;padding-top:11px;border-top:1px solid #e2e8f0}
+.dbody{display:none;margin-top:11px;padding-top:11px;border-top:1px solid #3f3f3f}
 .dc.open .dbody{display:block}
 .ddef{font-size:.83rem;color:var(--muted);line-height:1.55;margin-bottom:7px}
-.dadhd{background:#f3eeff;border-left:3px solid var(--p);
+.dadhd{background:#1e1830;border-left:3px solid var(--p);
   padding:9px 11px;border-radius:7px;font-size:.8rem;color:var(--text);line-height:1.5}
 .dadhd strong{color:var(--p)}
 
@@ -338,20 +407,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .dbt-card.red{border-color:var(--red)}.dbt-card.red h3{color:var(--red)}
 
 /* SAFETY BEHAVIOR CHIPS (multi-select) */
-.sb-chip{padding:7px 12px;border-radius:20px;border:2px solid #e2e8f0;
-  font-size:.78rem;cursor:pointer;background:#fff;
+.sb-chip{padding:7px 12px;border-radius:20px;border:2px solid #3f3f3f;
+  font-size:.78rem;cursor:pointer;background:#272727;
   transition:all .18s;font-weight:600;color:var(--muted);margin:3px}
 .sb-chip:hover{border-color:var(--red);color:var(--red)}
 .sb-chip.on{background:var(--red);border-color:var(--red);color:#fff;animation:pop .22s ease}
 
 /* ACCEPTS STEP */
-.accepts-step{background:var(--bg);border-radius:12px;padding:14px 15px;margin-bottom:10px}
+.accepts-step{background:#272727;border-radius:12px;padding:14px 15px;margin-bottom:10px}
 .as-letter{font-size:2rem;font-weight:800;color:var(--teal);line-height:1}
 .as-word{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
 .as-desc{font-size:.82rem;color:var(--muted);margin-bottom:10px;line-height:1.5}
 .as-opts{display:flex;flex-direction:column;gap:6px}
-.as-opt{padding:9px 12px;border-radius:9px;border:2px solid #e2e8f0;
-  background:#fff;cursor:pointer;font-size:.82rem;font-weight:600;
+.as-opt{padding:9px 12px;border-radius:9px;border:2px solid #3f3f3f;
+  background:#1a1a1a;cursor:pointer;font-size:.82rem;font-weight:600;
   color:var(--text);transition:all .18s;text-align:left}
 .as-opt:hover{border-color:var(--teal);color:var(--teal)}
 .as-opt.on{background:var(--teal);border-color:var(--teal);color:#fff}
@@ -628,12 +697,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .ft-btn.stop{background:var(--red)}
 
 /* tab seg */
-.task-seg{display:flex;background:#e2e8f0;border-radius:10px;padding:3px;
+.task-seg{display:flex;background:#272727;border-radius:10px;padding:3px;
   margin-bottom:16px;gap:2px}
 .task-sego{flex:1;background:none;border:none;border-radius:8px;
   padding:7px 4px;font-size:.73rem;font-weight:700;color:var(--muted);
   cursor:pointer;transition:all .2s;text-align:center}
-.task-sego.on{background:#fff;color:var(--p);box-shadow:0 2px 7px rgba(0,0,0,.09)}
+.task-sego.on{background:#3f3f3f;color:var(--p);box-shadow:0 2px 7px rgba(0,0,0,.3)}
 
 /* empty state */
 .empty-state{text-align:center;padding:28px 20px;color:var(--muted)}
@@ -671,6 +740,243 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
   <!-- ── HOME ── -->
   <div class="tab on" id="tab-home">
+
+    <!-- YOUTUBE-STYLE GRID -->
+    <div class="yt-hdr">
+      <div class="yt-hdr-title">For you</div>
+      <div class="yt-streak" id="yt-streak">🔥 0-day streak · 0/12</div>
+    </div>
+
+    <div class="yt-chips">
+      <button class="yt-chip on" data-yf="all" onclick="ytFilter(this)">All</button>
+      <button class="yt-chip" data-yf="presence" onclick="ytFilter(this)">🧘 Presence</button>
+      <button class="yt-chip" data-yf="cbt" onclick="ytFilter(this)">🧠 CBT</button>
+      <button class="yt-chip" data-yf="dbt" onclick="ytFilter(this)">🛡️ DBT</button>
+      <button class="yt-chip" data-yf="tolle" onclick="ytFilter(this)">📖 Tolle</button>
+      <button class="yt-chip" data-yf="quick" onclick="ytFilter(this)">⚡ Quick</button>
+    </div>
+
+    <div class="yt-grid" id="yt-grid">
+      <!-- QUICK TOOLS row -->
+      <div class="yt-card" role="button" tabindex="0" data-ex="rescue" data-cat="quick" onclick="openEx('rescue')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#7a1515,#c44b1e)">
+          <span class="yt-thumb-emoji">🆘</span>
+          <span class="yt-dur">60 sec</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#7a1515,#c44b1e)">🆘</div>
+          <div class="yt-info">
+            <div class="yt-title">Emergency Reset</div>
+            <div class="yt-channel">Quick Tools</div>
+            <div class="yt-stats">Mind spiraling? 60-second reset</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="minddump" data-cat="quick" onclick="openEx('minddump')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#0d0d2a,#1a1a4a)">
+          <span class="yt-thumb-emoji">🌀</span>
+          <span class="yt-dur">Any time</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#0d0d2a,#1a1a4a)">🌀</div>
+          <div class="yt-info">
+            <div class="yt-title">Mind Dump</div>
+            <div class="yt-channel">Quick Tools</div>
+            <div class="yt-stats">Thoughts racing? Get them out</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+
+      <!-- PRESENCE -->
+      <div class="yt-card" role="button" tabindex="0" data-ex="breath" data-cat="presence" onclick="openEx('breath')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#0d1a3a,#1a4a7a)">
+          <span class="yt-thumb-emoji">🌬️</span>
+          <span class="yt-dur">2 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#0d1a3a,#1a4a7a)">🌬️</div>
+          <div class="yt-info">
+            <div class="yt-title">Breath Awareness</div>
+            <div class="yt-channel">Presence</div>
+            <div class="yt-stats">Beginner · Calming</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="bodyscan" data-cat="presence" onclick="openEx('bodyscan')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#0d2a1a,#1a5a3a)">
+          <span class="yt-thumb-emoji">🧘</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#0d2a1a,#1a5a3a)">🧘</div>
+          <div class="yt-info">
+            <div class="yt-title">Body Scan</div>
+            <div class="yt-channel">Presence</div>
+            <div class="yt-stats">Grounding · When mind won't stop</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="senses" data-cat="presence" onclick="openEx('senses')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#2a1a00,#5a3a00)">
+          <span class="yt-thumb-emoji">👁️</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#2a1a00,#5a3a00)">👁️</div>
+          <div class="yt-info">
+            <div class="yt-title">5 Senses Grounding</div>
+            <div class="yt-channel">Presence</div>
+            <div class="yt-stats">ADHD favourite · Reality check</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="acceptance" data-cat="tolle" onclick="openEx('acceptance')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#001a2a,#003a5a)">
+          <span class="yt-thumb-emoji">🌊</span>
+          <span class="yt-dur">2 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#001a2a,#003a5a)">🌊</div>
+          <div class="yt-info">
+            <div class="yt-title">Radical Acceptance</div>
+            <div class="yt-channel">Tolle · DBT</div>
+            <div class="yt-stats">Stop fighting what is</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+
+      <!-- CBT -->
+      <div class="yt-card" role="button" tabindex="0" data-ex="thoughts" data-cat="cbt" onclick="openEx('thoughts')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#2a0d00,#5a2200)">
+          <span class="yt-thumb-emoji">💭</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#2a0d00,#5a2200)">💭</div>
+          <div class="yt-info">
+            <div class="yt-title">Thought Catcher + CBT</div>
+            <div class="yt-channel">CBT</div>
+            <div class="yt-stats">Write → identify → challenge → release</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+
+      <!-- TOLLE -->
+      <div class="yt-card" role="button" tabindex="0" data-ex="ego" data-cat="tolle" onclick="openEx('ego')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#1a0a2a,#3a1a5a)">
+          <span class="yt-thumb-emoji">🎭</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#1a0a2a,#3a1a5a)">🎭</div>
+          <div class="yt-info">
+            <div class="yt-title">Ego Observer</div>
+            <div class="yt-channel">Tolle · Advanced</div>
+            <div class="yt-stats">Notice the inner critic · see it</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+
+      <!-- DBT -->
+      <div class="yt-card" role="button" tabindex="0" data-ex="accepts" data-cat="dbt" onclick="openEx('accepts')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#2a0000,#5a1010)">
+          <span class="yt-thumb-emoji">🎯</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#2a0000,#5a1010)">🎯</div>
+          <div class="yt-info">
+            <div class="yt-title">ACCEPTS Toolkit</div>
+            <div class="yt-channel">DBT · Crisis tool</div>
+            <div class="yt-stats">Ride out overwhelming feelings</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="selfsoothe" data-cat="dbt" onclick="openEx('selfsoothe')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#2a0020,#5a1040)">
+          <span class="yt-thumb-emoji">🌸</span>
+          <span class="yt-dur">2 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#2a0020,#5a1040)">🌸</div>
+          <div class="yt-info">
+            <div class="yt-title">Self-Soothe with Senses</div>
+            <div class="yt-channel">DBT · Calming</div>
+            <div class="yt-stats">Calm your nervous system</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="safetybehaviors" data-cat="dbt" onclick="openEx('safetybehaviors')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#001a10,#004a20)">
+          <span class="yt-thumb-emoji">🛡️</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#001a10,#004a20)">🛡️</div>
+          <div class="yt-info">
+            <div class="yt-title">Safety Behaviors Check</div>
+            <div class="yt-channel">DBT · Social anxiety</div>
+            <div class="yt-stats">Why avoidance backfires</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="selfsoothe2" data-cat="dbt" onclick="openEx('selfsoothe2')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#001020,#003050)">
+          <span class="yt-thumb-emoji">💆</span>
+          <span class="yt-dur">2 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#001020,#003050)">💆</div>
+          <div class="yt-info">
+            <div class="yt-title">Emotional First Aid</div>
+            <div class="yt-channel">DBT · ADHD</div>
+            <div class="yt-stats">5-step plan for emotion floods</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="mindfulactivity" data-cat="dbt" onclick="openEx('mindfulactivity')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#0a1a00,#203a00)">
+          <span class="yt-thumb-emoji">🚶</span>
+          <span class="yt-dur">3 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#0a1a00,#203a00)">🚶</div>
+          <div class="yt-info">
+            <div class="yt-title">Mindful Activity</div>
+            <div class="yt-channel">DBT · Daily habit</div>
+            <div class="yt-stats">Turn any task into presence practice</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+      <div class="yt-card" role="button" tabindex="0" data-ex="mindfulmeditation" data-cat="dbt" onclick="openEx('mindfulmeditation')">
+        <div class="yt-thumb" style="background:linear-gradient(135deg,#150a2a,#2a1550)">
+          <span class="yt-thumb-emoji">🪷</span>
+          <span class="yt-dur">10 min</span>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-ch-ico" style="background:linear-gradient(135deg,#150a2a,#2a1550)">🪷</div>
+          <div class="yt-info">
+            <div class="yt-title">Mindful Meditation</div>
+            <div class="yt-channel">DBT · Intermediate</div>
+            <div class="yt-stats">6-step guided · let thoughts pass</div>
+          </div>
+          <button class="yt-more" onclick="event.stopPropagation()">⋮</button>
+        </div>
+      </div>
+    </div>
 
     <div class="quote" id="qcard" onclick="nextQ()">
       <div class="q-text" id="qtxt">…</div>
@@ -1167,12 +1473,33 @@ function updateStats(){
   document.getElementById('pcta').textContent=
     n===total?'All done! Amazing 🎉':n>0?`${total-n} more to go!`:'Start your first session →';
   document.getElementById('rfill').style.strokeDashoffset=201*(1-n/total);
+  const ys=document.getElementById('yt-streak');
+  if(ys)ys.textContent=`🔥 ${S.streak}-day streak · ${n}/${total}`;
   document.querySelectorAll('.card[data-ex]').forEach(c=>{
     if(S.todayDone.includes(c.dataset.ex)){
       c.style.opacity='.62';
       if(!c.querySelector('.cdone')){
         const d=document.createElement('div');d.className='cdone';d.textContent='✓';c.appendChild(d);}
     }
+  });
+  document.querySelectorAll('.yt-card[data-ex]').forEach(c=>{
+    const done=S.todayDone.includes(c.dataset.ex);
+    c.style.opacity=done?'.55':'1';
+    const existing=c.querySelector('.yt-done-badge');
+    if(done&&!existing){
+      const b=document.createElement('span');b.className='yt-done-badge';b.textContent='✓ Done';
+      c.querySelector('.yt-thumb').appendChild(b);
+    }
+  });
+}
+
+function ytFilter(chip){
+  document.querySelectorAll('.yt-chip').forEach(c=>c.classList.remove('on'));
+  chip.classList.add('on');
+  const f=chip.dataset.yf;
+  document.querySelectorAll('.yt-card').forEach(c=>{
+    const match=f==='all'||c.dataset.cat===f;
+    c.style.display=match?'':'none';
   });
 }
 
